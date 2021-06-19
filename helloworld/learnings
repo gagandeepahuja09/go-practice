@@ -1,0 +1,10 @@
+// 5 Important Questions
+
+// How to compile & run code?
+// go run <filename>.go ==> compile + execute code
+// go run <filename>.go ==> compiles code ==> creates an executable file can be run using ./<filename>
+
+// go fmt ==> Formats all the code in each file in the current directory.
+// go install ==> Compiles & installs a package.
+// go get ==> Downloads the raw source code of someone else's project.
+// go test ==> runs any tests associated with the current project.
