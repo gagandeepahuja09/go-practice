@@ -1,0 +1,52 @@
+// we can't do shorthand variable initialization outside main
+// because outside main variable can only be declared & not initialized
+
+// var card string = "Ace of Spades"
+// this is shorthand syntax + we can let go infer the type on its own.
+// := is shorthand syntax for initialization
+
+// If we declare the newCard function in a separate file, we can still use it
+// without exporting it, if we run them together with the same package
+// go run main.go newCard.go
+
+// Arrays and Slices
+// Arrays: Fixed length
+// Slices: Dynamic, can grow & shrink
+// Every element in array / slice must be of same type
+// How can we add new elements in a slice?
+// Using the append method append(arrayName, <new_element>)
+// Note that append is immutable: it returns a new slice
+
+// How to iterate through slice
+// range tells that we want to iterate over a slice
+// for index, card := range cards
+
+// Note: Unlike traditional languages, go throws an error(instead of a warning)
+// , if a variable is not
+// in use.
+
+// OO Approach v/s Go Approach
+
+// OO Approach
+// Deck class
+// cards property
+// print, shuffle, saveToFile methods
+
+// Go Approach
+// We will extend any of the base types(string, integer, float, array, map) in go
+// type deck []string
+// Create functions with deck as receiver
+
+// Custom Type Declaration
+// type deck []string
+
+// Receiver functions
+// They are similar to a method in a class, any value(instance) of type(class) deck
+// can use this
+// we can consider d as any instance. It is a bit similar to this keyword
+// but it is explicitly defined instead of this.
+// func (d deck) print() {
+// 	for i, card := range d {
+// 		fmt.Println(i, card)
+// 	}
+// }
