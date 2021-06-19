@@ -8,3 +8,13 @@
 // go install ==> Compiles & installs a package.
 // go get ==> Downloads the raw source code of someone else's project.
 // go test ==> runs any tests associated with the current project.
+
+
+// Go Packages
+// Package == Project == Workspace ==> Collection of common source code files
+// Every file must declare the package that it belongs to eg. "package main"
+// 2 Different kinds of packages in Go
+// Executable: Generate a file that we can run ==> Has the word main ==> "package main"
+// Reusable: Will have a custom name.
+// If we had used any other name, then the executable file wouldn't have been created.
+
