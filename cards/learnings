@@ -65,3 +65,6 @@
 // deal function
 // user will get cards ==> [:handsize]
 // left over ==> [handsize:]
+
+// Byte Slices
+// Joining a slice of strings
