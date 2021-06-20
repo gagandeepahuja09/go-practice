@@ -68,3 +68,14 @@
 
 // Byte Slices
 // Joining a slice of strings
+
+// Saving data to hard drive
+// Reading data from hard drive
+// Error Handling
+
+// Shuffling a deck
+// We can use built-in library(rand.Intn()) but that has a limitation
+// Everytime, when we run our code it uses the same seed
+// Documentation clearly states that we have to use the seed function
+// if we want a different behaviour everytime we run our code.
+// so before calling the rand.Intn, we called rand.seed
