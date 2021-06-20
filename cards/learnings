@@ -79,3 +79,17 @@
 // Documentation clearly states that we have to use the seed function
 // if we want a different behaviour everytime we run our code.
 // so before calling the rand.Intn, we called rand.seed
+
+// Testing with go
+// Unlike other programming languages, go doesn't use other frameworks like
+// RSpec, mocha, jasmine, jest, enzyme, Selenium, etc.
+// To make a test, create a new test file end in _test.go
+// To run all tests in a package, run "go test"
+
+// How to decide what to test?
+// You can use plain if statements to test and can easily invoke any method
+// We name functions in capital
+// testing package used
+// t.Errorf()
+// "go mod init cards" was required. created a go.mod file
+// a sort of module
