@@ -55,3 +55,13 @@
 // Iterate through all possible combinations of suits & values
 
 // Slice range syntax
+// We can easily specify a range in go
+// fruits[startIncluded: endNotIncluded]
+// We can leave out either the start or the end
+// Which would either infer that we are starting from the first element
+// Or go until the last element
+
+// Now we need to hand over a set of cards to a user
+// deal function
+// user will get cards ==> [:handsize]
+// left over ==> [handsize:]

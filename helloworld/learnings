@@ -11,6 +11,7 @@
 
 
 // Go Packages
+// Purpose of package: To group together code with a similar purpose.
 // Package == Project == Workspace ==> Collection of common source code files
 // Every file must declare the package that it belongs to eg. "package main"
 // 2 Different kinds of packages in Go
@@ -18,3 +19,10 @@
 // Reusable: Will have a custom name.
 // If we had used any other name, then the executable file wouldn't have been created.
 
+// Import statements
+// Important any library(standard package) or any other source code created by another developer.
+
+// File structure in go
+// 1. Define package name.
+// 2. Import other packages required.
+// 3. functions
