@@ -93,3 +93,9 @@
 // t.Errorf()
 // "go mod init cards" was required. created a go.mod file
 // a sort of module
+
+// Testing file I/O
+// Since go doesn't use any specific library, it doesn't take care of any cleanup
+// Includes any non-volatile changes like DB, file, etc.
+// So before the start of test and at the end of test, we can delete all the
+// test files created. eg all files ending with _decktesting
