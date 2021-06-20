@@ -50,3 +50,8 @@
 // 		fmt.Println(i, card)
 // 	}
 // }
+
+// Creating a new deck
+// Iterate through all possible combinations of suits & values
+
+// Slice range syntax
