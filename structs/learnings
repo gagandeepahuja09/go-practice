@@ -1,0 +1,11 @@
+// Structs in Go
+// Data structure: Collection of properties that are related together.
+// In the above example, we can see that as new requirements come up
+// then we would need to add more properties for certain kind of operations
+// eg. playing pocker or black-jack or some other game.
+
+// Go initializes with zero values
+// Eg. string ""
+// int 0
+// float 0
+// bool false
