@@ -10,7 +10,11 @@
 // float 0
 // bool false
 
-
 // Pass by Value
 // Go is a pass by value language. That is by default for all cases, a new
 // copy is created when we pass it into a function.
+
+// Pointer Operations
+// &variable ==> Give me the memory adress of the value this variable is pointing at
+// *pointer ==> Give me the value this memory address is pointing at
+// *type ==> This a variable that is a pointer to a specific type.

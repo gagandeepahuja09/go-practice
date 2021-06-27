@@ -18,6 +18,7 @@ func main() {
 	devon := person{firstName: "Devon", lastName: "Conway"}
 	pointerToDevon := &devon
 	pointerToDevon.updateName("Devy")
+	fmt.Printf("%v\n", &pointerToDevon)
 
 	taylor := person{
 		firstName: "Ross",
@@ -32,8 +33,8 @@ func main() {
 	taylor.print()
 }
 
-func (ptp *person) updateName(newFirstName string) {
-	(*ptp).firstName = newFirstName
+func (pointerToPerson *person) updateName(newFirstName string) {
+	(*pointerToPerson).firstName = newFirstName
 }
 
 func (p person) print() {
