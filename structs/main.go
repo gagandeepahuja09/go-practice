@@ -16,9 +16,7 @@ type contactInfo struct {
 func main() {
 	// alex := person{"Devon", "Conway"}
 	devon := person{firstName: "Devon", lastName: "Conway"}
-	pointerToDevon := &devon
-	pointerToDevon.updateName("Devy")
-	fmt.Printf("%v\n", &pointerToDevon)
+	devon.updateName("Devy")
 
 	taylor := person{
 		firstName: "Ross",

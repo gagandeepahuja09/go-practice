@@ -18,3 +18,7 @@
 // &variable ==> Give me the memory adress of the value this variable is pointing at
 // *pointer ==> Give me the value this memory address is pointing at
 // *type ==> This a variable that is a pointer to a specific type.
+
+// Pointer Shortcut
+// With receiver functions, rather than doing (&variable).funcName(), we can directly do
+// variable.funcName() and go will extract it's pointer.
