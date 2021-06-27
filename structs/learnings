@@ -9,3 +9,8 @@
 // int 0
 // float 0
 // bool false
+
+
+// Pass by Value
+// Go is a pass by value language. That is by default for all cases, a new
+// copy is created when we pass it into a function.
