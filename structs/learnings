@@ -22,3 +22,16 @@
 // Pointer Shortcut
 // With receiver functions, rather than doing (&variable).funcName(), we can directly do
 // variable.funcName() and go will extract it's pointer.
+
+// Gotchas With Pointers
+// Unlike in structs where the variable is passed by value, in other data types like slices, it is
+// passed by reference. Why? The reason will be discussed below.
+
+// Reference Vs Value Types
+// How are slices implemented? They use arrays as those are the primitive data types.
+// slice is like a struct with properties ==> capacity, length, ptr to head
+// This helps us in understanding that even though we are copying the slice, it is still pointing
+// to the actual array.
+
+// Value Types in Go: int, float, string, bool, structs.
+// Reference Types in Go: slices, maps, channels, pointers, functions  
