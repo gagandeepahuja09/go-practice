@@ -1,0 +1,9 @@
+// Maps
+// All keys have the same type and all values have the same type in a map.
+// This is the basic difference between a struct & a map.
+// Declaring:
+// Method 1
+// map[typeOfKey]typeOfValue{
+// }
+
+// We use a bracket notation for maps as they key could be of any type.
