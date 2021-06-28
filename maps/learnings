@@ -7,3 +7,20 @@
 // }
 
 // We use a bracket notation for maps as they key could be of any type.
+
+// Differences b/w Maps & Structs
+// Map
+// 1. All keys must be of the same type
+// 2. All values must be of the same type
+// 3. Keys are indexed - We can iterate over them.
+// 4. Reference Type ==> Used a pointer to an underlying primitive data structure.
+// 5. Don't need to know all keys at compile time.
+// 6. Used to represent a collection of related properties
+
+// Struct
+// 1. Values can be of different types
+// 2. Keys don't support indexing.
+// 3. Value type
+// 4. We need to know all the different fields at compile time.
+// 5. Used to represent a "thing" with a lot of different properties.
+
