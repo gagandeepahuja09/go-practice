@@ -1,0 +1,27 @@
+// The purpose of interfaces mainly is code reuse.
+// Example for 2 structs englishBot and spanishBot, we will have a
+// print bot which will do exactly the same thing
+
+// Hence we can create an interface(called bot) which will have a common
+// implementation of printBot
+
+// A struct qualifies as an interface of type bot if it has a getGreeting method
+// which returns a string
+// type bot interface {
+// 	getGreeting() string
+// }
+
+// we will create these 2 implementations of getGreeting for both types of bots, so
+// that they qualify to be consider as a bot.
+
+// now in printGreeting method, we will use the bot as a parameter type in order to
+// achieve code reuse. Since both are of bot type we can call printGreeting for both.
+
+// type bot interface {
+// 	getGreeting(string, int) (string, error)
+// }
+
+// Concrete type: Types for which we can create a value
+// map, struct, int, slice, bool, englishBot
+
+// Interface type: Type of which we can't create a value
