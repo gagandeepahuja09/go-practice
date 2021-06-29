@@ -1,0 +1,15 @@
+// Learn to properly use the documentation to figure out stuff
+// https://golang.org/pkg/net/http/#Response
+
+// Body io.ReadCloser
+// This show that struct can also have interfaces as types
+// This means that we can have any type that satisfies the io.ReadCloser interface.
+
+// So we figure out that ReadCloser is also a type
+// type ReadCloser interface {
+// 	Reader
+// 	Closer
+// }
+// This is not the normal interface syntax that we have seen
+// Probably an interface could have multiple interfaces that must be satisfied
+// So, ReadCloser interface must satisfy the requirements of both Reader & Closer.
