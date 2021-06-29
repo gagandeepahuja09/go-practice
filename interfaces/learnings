@@ -25,3 +25,23 @@
 // map, struct, int, slice, bool, englishBot
 
 // Interface type: Type of which we can't create a value
+
+// Extra Interface Notes
+// 1. Interfaces are not generic types ==> Other languages have generic types
+// - Go famously doesn't.
+
+// 2. Interfaces are implicit ==> We don't have to manually say that our custom type
+// satisfies some interface.
+// This is both a blessing and a curse. Blessing as we don't have to type the
+// boiler plate like spanishBot implements bot.
+// And a curse because we have to check if it's being implemented properly or not.
+// Someone checking the code would have to figure out. Also we could run into
+// errors at runtime while figuring out.
+
+// 3. Interfaces are a contract to help us manage types.
+// GARBAGE IN --> GARBAGE OUT
+//  If our custom type's implementation of a function is broken, then interfaces won't
+//  help us.
+
+// 3. Interfaces are tough. Step #1 is understanding how to read them.
+// Writing your own interfaces is tough and requires experience.
