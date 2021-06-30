@@ -13,3 +13,24 @@
 // This is not the normal interface syntax that we have seen
 // Probably an interface could have multiple interfaces that must be satisfied
 // So, ReadCloser interface must satisfy the requirements of both Reader & Closer.
+
+// The concept of interfaces could be applied to print as well.
+// With reader interface, the source of input could be [] of string / byte /
+// float / int, etc.
+// But we shouldn't have separate functions for these.
+
+// Purpose of the reader interface
+// We could require to read many different kinds of files like
+// HTTP Request Body / Text File / HTML File / Image File / User entering text
+// in command line.
+
+// So we can have a common Reader interface for them. The condition is that
+// it should return a byte slice as output.
+// The read method is implemented such that it passes the byte slice as input
+// params and that byte slice is modified. Along with that it returns the length
+// of byte slice.
+
+// Working with the read function
+// We allocate a byte slice of arbitrarily large size
+// We use this byte slice to pass it in the read function.
+// We then typecast / convert it into the required type.
