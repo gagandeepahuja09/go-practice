@@ -34,3 +34,31 @@
 // We allocate a byte slice of arbitrarily large size
 // We use this byte slice to pass it in the read function.
 // We then typecast / convert it into the required type.
+
+// The Writer Interface
+// Do all this:
+// bs := make([]byte, 99999)
+// resp.Body.Read(bs)
+// fmt.Println(string(bs))
+// In one line
+// Look for io.Copy in the documentation
+// io.Copy(dst Writer, src Reader)
+// io.Copy(os.Stdout, resp.Body)
+// What does a Reader & Writer do?
+// Reader: Source of data ---> []byte
+// Writer: []byte ---> Source of data(Outgoing HTTP req,
+// Text file on hard-drive, Image file on hard-drive, Terminal)
+
+// The io.Copy function
+// Lookup Writer interface in documentation.
+// If you hover over os.Stdout, you will see that it has File type
+// If you check the implementation of File, you can see that it
+// implements the Write function, hence it implements the Writer
+// interface.
+
+// The implementation of io.Copy(Source code)
+// If we hover to the Copy and lookup it's implementation, we can
+// see that it also
+// 1. Create a byte slice
+// 2. Calls the read function on the reader(src.Read)
+// 3. Calls the write function on the writer(dst.Write)
