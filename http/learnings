@@ -62,3 +62,7 @@
 // 1. Create a byte slice
 // 2. Calls the read function on the reader(src.Read)
 // 3. Calls the write function on the writer(dst.Write)
+
+// A Custom Writer
+// We will have our own struct which will have a
+// receiver method of write & hence implement Writer
