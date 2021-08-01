@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message Person {
+    int32 age = 1;
+    string first_name = 2;
+    string last_name = 3;
+    bytes small_picture = 4; // represents the profile picture in a small .jpg file
+    bool is_profile_verified = 5;
+    float height = 6; // height of the person in cms
+    // Repeated fields 
+    repeated string phone_numbers = 7; // list of phone no.s that is optional to provide
+
+    enum EyeColour {
+        // the default of an enum is specified with the tag 0
+        UNKOWN_COLOUR = 0;
+        EYE_GREEN = 1;
+        EYE_BROWN = 2;
+        EYE_BLUE = 3;
+    }
+
+    EyeColour eye_colour = 8;
+}
