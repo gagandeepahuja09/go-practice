@@ -19,7 +19,25 @@ message Person {
     }
 
     EyeColour eye_colour = 8;
+
+    Date birthday = 9;
+
+    message Address {
+        string address_line_1 = 1;
+        string address_line_2 = 2;
+        int32 zipcode = 3;
+        string city = 4;
+        string country = 5;
+    }
+
+    repeated Address addresses = 10;
 }
 
 // We can define multiple message types in the same proto file and those can be
 // embedded as well.
+
+message Date {
+    int32 year = 1;
+    int32 month = 2;
+    int32 day = 3;
+}
