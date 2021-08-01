@@ -20,3 +20,6 @@ message Person {
 
     EyeColour eye_colour = 8;
 }
+
+// We can define multiple message types in the same proto file and those can be
+// embedded as well.
