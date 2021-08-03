@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-// import "protobufs/basics-part-1/date.proto";
+package person;
 
-// protoc -I=/Users/gagandeep.ahuja/Documents/PersonalProjects/go-practice/protobufs --go_out=go-code basics-part-1/1-scalar-types.proto
+import "protobufs/basics-part-1/date-with-package.proto";
 
 message Person {
     int32 age = 1;
@@ -24,7 +24,7 @@ message Person {
 
     EyeColour eye_colour = 8;
 
-    // Date birthday = 9;
+    my.date.Date birthday = 9;
 
     message Address {
         string address_line_1 = 1;

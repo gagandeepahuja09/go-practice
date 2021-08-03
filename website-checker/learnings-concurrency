@@ -1,0 +1,8 @@
+// Go Routines
+// When func main() is called, a go routine is automatically created.
+// go ==> Run this function inside of a brand new go routine
+// As soon as it sees some blocking code, control flow is passed back to
+// the main routine to check if there is any other go routine waiting for execution.
+
+// All these go routines are handled by the go scheduler.
+// 

@@ -10,17 +10,20 @@ import "fmt"
 type intRep int
 type intRep2 intRep
 
-var ir intRep = 42
-var ir2 intRep2 = 43
+var (
+	ir  intRep  = 42
+	ir2 intRep2 = 43
 
-var a int = 42              // 0
-var b string = "James Bond" // ""
-var c bool = true           // false
+	a int    = 42           // 0
+	b string = "James Bond" // ""
+	c bool   = true         // false
+)
 
 func main() {
 	// %T will give us the type and %v the value
 	fmt.Printf("%T \t%v \n%T \t%v\n", ir, ir, ir2, ir2)
 	a = 42
+	ir2 = intRep2(a)
 	b = "James Bond"
 	c = true
 	x := 42
