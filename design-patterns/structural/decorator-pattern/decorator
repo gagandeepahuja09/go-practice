@@ -1,0 +1,5 @@
+* Let's you provide additional functionality or decorate an object w/o
+ altering the object
+* Toppings in pizza: you add some price to existing base pizza
+* It will both implement the pizza interface and have pizza embedded
+ in it's struct
