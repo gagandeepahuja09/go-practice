@@ -1,16 +1,31 @@
 package main
 
+import "fmt"
+
 type hasMoneyState struct {
+	vendingMachine *vendingMachine
 }
 
-func (i *hasMoneyState) addItem() {
+func (i *hasMoneyState) addItem() error {
+	return fmt.Errorf("Item dispense in progress")
 }
 
-func (i *hasMoneyState) requestItem() {
+func (i *hasMoneyState) requestItem() error {
+	return fmt.Errorf("Item dispense in progress")
 }
 
-func (i *hasMoneyState) dispenseItem() {
+func (i *hasMoneyState) dispenseItem() error {
+	fmt.Println("Dispensing item")
+	i.vendingMachine.itemCount--
+	if i.vendingMachine.itemCount <= 0 {
+		i.vendingMachine.itemCount = 0
+		i.vendingMachine.setState(i.vendingMachine.noItem)
+	} else {
+		i.vendingMachine.setState(i.vendingMachine.hasItem)
+	}
+	return nil
 }
 
-func (i *hasMoneyState) insertMoney() {
+func (i *hasMoneyState) insertMoney() error {
+	return fmt.Errorf("Item dispense in progress")
 }
