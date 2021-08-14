@@ -14,11 +14,11 @@ func (i *hasItemState) addItem(count int) error {
 
 func (i *hasItemState) requestItem() error {
 	if i.vendingMachine.itemCount == 0 {
-		i.vendingMachine.setState(noItemState)
+		i.vendingMachine.setState(i.vendingMachine.noItem)
 		return fmt.Errorf("No item present")
 	}
 	fmt.Println("Item requested")
-	i.vendingMachine.setState(itemRequestedState)
+	i.vendingMachine.setState(i.vendingMachine.itemRequested)
 	return nil
 }
 
@@ -26,6 +26,6 @@ func (i *hasItemState) dispenseItem() error {
 	return fmt.Errorf("Item must be selected first")
 }
 
-func (i *hasItemState) insertMoney() error {
+func (i *hasItemState) insertMoney(money int) error {
 	return fmt.Errorf("Item must be selected first")
 }

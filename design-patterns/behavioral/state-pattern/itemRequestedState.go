@@ -6,7 +6,7 @@ type itemRequestedState struct {
 	vendingMachine *vendingMachine
 }
 
-func (i *itemRequestedState) addItem() error {
+func (i *itemRequestedState) addItem(count int) error {
 	return fmt.Errorf("Item dispense in progress")
 }
 
@@ -23,7 +23,7 @@ func (i *itemRequestedState) insertMoney(money int) error {
 	if money < itemPrice {
 		return fmt.Errorf("Please insert amount = %s", itemPrice)
 	}
-	fmt.Printf("Amount inserted is appropriate")
+	fmt.Println("Amount inserted is appropriate")
 	i.vendingMachine.setState(i.vendingMachine.hasMoney)
 	return nil
 }

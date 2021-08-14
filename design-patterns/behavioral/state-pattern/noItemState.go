@@ -3,22 +3,22 @@ package main
 import "fmt"
 
 type noItemState struct {
-	vendingMachine vendingMachine
+	vendingMachine *vendingMachine
 }
 
-func (i *noItemState) addItem(count) error {
+func (i *noItemState) addItem(count int) error {
 	i.vendingMachine.incrementItemCount(count)
 	return nil
 }
 
 func (i *noItemState) requestItem() error {
-	fmt.Errorf("Item out of stock")
+	return fmt.Errorf("Item out of stock")
 }
 
-func (i *noItemState) dispenseItem() {
-	fmt.Errorf("Item out of stock")
+func (i *noItemState) dispenseItem() error {
+	return fmt.Errorf("Item out of stock")
 }
 
-func (i *noItemState) insertMoney() {
-	fmt.Errorf("Item out of stock")
+func (i *noItemState) insertMoney(money int) error {
+	return fmt.Errorf("Item out of stock")
 }

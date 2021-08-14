@@ -57,6 +57,9 @@ func newVendingMachine(itemCount, itemPrice int) *vendingMachine {
 }
 
 // request item, add item, insert money, dispense item
+
+// cannot use v (type vendingMachine) as type *vendingMachine in field value
+
 func (v *vendingMachine) requestItem() error {
 	return v.currentState.requestItem()
 }

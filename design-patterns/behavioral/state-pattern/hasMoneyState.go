@@ -6,7 +6,7 @@ type hasMoneyState struct {
 	vendingMachine *vendingMachine
 }
 
-func (i *hasMoneyState) addItem() error {
+func (i *hasMoneyState) addItem(count int) error {
 	return fmt.Errorf("Item dispense in progress")
 }
 
@@ -26,6 +26,6 @@ func (i *hasMoneyState) dispenseItem() error {
 	return nil
 }
 
-func (i *hasMoneyState) insertMoney() error {
+func (i *hasMoneyState) insertMoney(money int) error {
 	return fmt.Errorf("Item dispense in progress")
 }
