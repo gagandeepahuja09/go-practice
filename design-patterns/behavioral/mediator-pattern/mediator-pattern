@@ -1,0 +1,10 @@
+Suggests creating a mediator object to avoid direct dependencies between objects.
+Example: Railway platform
+* Two trains never communicate among themselves on the availability of the train.
+* The station manager acts as a mediator & makes the platform available to only one of
+the trains.
+* It maintains a queue of waiting trains. In case of a train leaving the platform
+it notifies one of the train to arrive next.
+
+* passenger train and goods train implement the train interface
+* station manager implements the mediator interface.
