@@ -1,0 +1,6 @@
+* Golang has a very different approach to errors than other languages.
+* Uses error as return type, generally passed as the last parameter.
+* Makes it easy to see that which function returned the error and handle them using
+the same construct used for handling non-error tasks.
+* we could either use the existing errors.New() to return an error or use custom types to implement an error.
+* inline error check using if statement is a common idiom in go
