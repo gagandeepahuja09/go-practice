@@ -13,6 +13,7 @@ func task(ctx context.Context) {
 		case <-ctx.Done():
 			fmt.Println("Ending the context")
 			fmt.Println(ctx.Err())
+			// ctx.Err could be either deadline exceeded or context cancelled
 			time.Sleep(time.Second)
 		default:
 			fmt.Println(i)
