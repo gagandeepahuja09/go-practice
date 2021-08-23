@@ -11,3 +11,6 @@ UML Diagram:
 the concrete handler.
 * we assign the next for each in a helper function.
 * the client just calls the reception handler.
+
+* We also keep booleans in patient to keep a track of which stage the patient
+* is currently at.
