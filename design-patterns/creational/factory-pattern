@@ -1,0 +1,9 @@
+* Hides the creation logic of the instances being created.
+* The client only interacts with the factory struct and tells the kind of instance to
+be created.
+
+Major Components
+* iProduct
+* product struct which implements iProduct
+* concreteProd1, concreteProd2, concreteProd3, etc which embed the product 
+ and just change the params like name, logo, size, etc.
