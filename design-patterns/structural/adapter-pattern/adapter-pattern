@@ -27,4 +27,3 @@ old one.
  3. When using NewPrinter, it must call old printer under the hood, prefixing it
  with text Adapter. 
 
-
