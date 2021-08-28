@@ -1,0 +1,21 @@
+Purpose: So that object creation is encapsulated from the user that needs those objects.
+* Gives sort of ready to use objects.
+
+Singleton: * Having a unique instance of an object in the entire program.
+* Guarantee that there are no duplicates.
+
+
+
+
+Builder Pattern: * Reusing an algorithm to create many implementations of an interface.
+* We could be using the same technique to create many different types of objects.
+* Eg. we'll use the almost same technique to build a car and a bus except the 
+size / no. of seats would be different, so why not reuse
+the construction process.
+
+Components of a builder pattern: 
+* A director, few builders and the product that they build.
+* The director is represented by the manufactaring variable in the example.
+* The director is the one in charge of construction of the object but the builders
+are the one that return the actual vehicle.
+
