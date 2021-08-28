@@ -1,0 +1,28 @@
+* HTTP package has a handle method which has 2 methods: route & interface.
+* The interface must be a handler ==> ie must implement the serveHTTP method.
+
+* There is also another way, instead of the handle method, we can use the 
+handleFunc method. 
+
+* The handleFunc is part of an adapter that allows for using functions directly
+as serveHTTP implementations.
+
+* So we can say that serveHTTP is the legacy ahd we want to directly implement
+in handleFunc. For this we can embed serveHTTP in our new function.
+
+* We can utilise the power of use functions as types as Golang also has functions
+as first class variables.
+
+* HandlerFunc implements Handler interface.
+
+type HandlerFunc func(ResponseWriter, *Request)
+
+func (f HandlerFunc) serveHTTP(w ResponseWriter, r *Request) {
+    f(w, r)
+}
+
+* Implicit implementation gives a lot of flexibility and power to Go, but
+you must also be careful, because you don't know if a method or function could be
+implementing some interface that could provoke undesirable behaviors.
+
+TODO: Pipe example

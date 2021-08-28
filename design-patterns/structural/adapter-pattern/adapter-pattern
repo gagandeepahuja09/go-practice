@@ -12,6 +12,7 @@ more predictable. They allow us to use some base which we can't modify.
 modifications.
 * Means two things ==> code should be extensible enough and should not be modified
 as much as we can, because we aren't always aware of the implications.
+* One: output might be unexpected. Also might not be backward compatible.
 
 * Two interfaces which are incompatible but must work together are good candidates 
 for adapter pattern.
