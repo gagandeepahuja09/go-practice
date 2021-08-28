@@ -1,17 +1,22 @@
 package main
 
-type BikeBuilder struct{}
+type BikeBuilder struct {
+	v VehicleProduct
+}
 
 func (b *BikeBuilder) SetWheels() BuildProcess {
-	return nil
+	b.v.Wheels = 2
+	return b
 }
 
 func (b *BikeBuilder) SetSeats() BuildProcess {
-	return nil
+	b.v.Seats = 2
+	return b
 }
 
 func (b *BikeBuilder) SetStructure() BuildProcess {
-	return nil
+	b.v.Structure = "Bike"
+	return b
 }
 
 func (b *BikeBuilder) GetVehicle() VehicleProduct {

@@ -1,0 +1,27 @@
+Builder Pattern: * Reusing an algorithm to create many implementations of an interface.
+* We could be using the same technique to create many different types of objects.
+* Eg. we'll use the almost same technique to build a car and a bus except the 
+size / no. of seats would be different, so why not reuse
+the construction process.
+
+Components of a builder pattern: 
+* A director, few builders and the product that they build.
+* The director is represented by the manufactaring variable in the example.
+* The director is the one in charge of construction of the object but the builders
+are the one that return the actual vehicle.
+
+* Director has 2 methods: Construct and SetBuilder
+* Construct is to set the wheels, seats and structure
+* SetBuilder assigns the build Process eg. car / bike
+* buildProcess is embedded in director.
+
+* buildProcess is interface which tells to implement the setWheels, seat, structure 
+method and to return the vehicle product in the getVehicle method
+* the vehicle returned by the getVehicle is open for modification.
+
+* VehicleProduct is the struct which should have following properties: wheels, structure, seat
+
+* Then we move towards the implementation of the builders ==> car and bike builder.
+* They embed the vehicle product.
+* For all of them, we return the instance of the buildProcess after modifications so that this can be
+used by director for chaining.
