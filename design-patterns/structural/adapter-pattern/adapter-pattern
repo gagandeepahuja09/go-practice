@@ -1,0 +1,30 @@
+* Like in real life, an adapter will allow us to use something that wasn't built for
+a specific task in the beginning.
+
+* Example, when an interface gets outdated and it's not possible to replace it easily 
+or fast. Instead you use a new interface to deal with the current needs of your 
+application, which under the hood uses implementers of the old interface.
+
+* The adapter pattern also helps us to maintain open/closed principle, making them
+more predictable. They allow us to use some base which we can't modify.
+
+* Open / Closed ==> Code to should be open to new functionalities but closed to 
+modifications.
+* Means two things ==> code should be extensible enough and should not be modified
+as much as we can, because we aren't always aware of the implications.
+
+* Two interfaces which are incompatible but must work together are good candidates 
+for adapter pattern.
+
+* Example: We have an old printer interface and a new one. Users of the old interface
+don't expect the signature that the old one has, and we need an adapter so that users
+can use the old implementations if necessary(to work with some legacy code).
+
+* Requirement: Create a structure that can implement the new interface and use the
+old one.
+ 1. Create an adapter object that implements the new interface.
+ 2. The new adapter object must contain an instance of the old interface.
+ 3. When using NewPrinter, it must call old printer under the hood, prefixing it
+ with text Adapter. 
+
+
