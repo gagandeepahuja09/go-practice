@@ -1,0 +1,18 @@
+* It decouples an object from it's implementation.
+* To bring flexibility to a struct that change often.
+* Knowing the inputs and outputs of an object and making pure functional 
+implementations (same output for the same input) allows us to change code without
+knowing too much about it.
+
+* Example: Two printers and two ways of printing for each.
+* We will have 2 objects(Gd and Normal printer) and 2 implementations
+(Printer API1 and 2) that we will join using the bridge design pattern.
+
+* Both of them will have their own interfaces ==> Printer and PrinterAPI
+
+* We achieve this abstraction by embedding the API inside the 2 structs.
+* Both Normal & Gd printer will have the property of Printer of type PrinterAPI
+* Then they will do the modifications at their end and delegate it to API 
+for their implementation
+* Eg. normal ==> p.Printer.PrintMessage(msg)
+* Eg. gd ==> p.Printer.PrintMessage(gdMsg)
