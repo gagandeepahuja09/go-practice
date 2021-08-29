@@ -1,0 +1,32 @@
+* Widely used when writing libraries and frameworks.
+* Strategy ==> encapsulating algorithmic implementations in diff strategies.
+* With template pattern, we will try to acheive something similar but with
+ only part of the algorithm.
+
+* Template pattern lets the user write a part of the algorithm while the 
+rest is executed by the abstraction.
+
+* Objective: 
+    * Defer a part of an algorithm to a library user.
+    * Improving reusability by abstracting parts of the code that are not common.
+
+* Example: One step deferred to the user
+* Req.s and Acceptance Criteria:
+    * Each part must return a string
+    * 1st & 3rd steps return strings implemented by the library.
+    * 2nd step is whatever string the user wants to return but it's defined 
+    by the MessageRetriever interface. That is, the user needs to implement
+    this interface.
+    * The algorithm is executed sequentially by a string called ExecuteAlgorithm
+    & returns the string returned by all the steps joined by a space. This ExecuteAlgorithm
+    will be implemented by the Template struct.
+
+* UNIT TESTS
+* Focus on testing the public methods only.
+* If our private methods aren't called from some level of the public ones, then they aren't called at all.
+* We will create a TestStruct that implements the Message method and we will 
+embed the Template struct so that we can call the ExecuteAlgorithm method.
+
+* Why implicit interface implementation could be much better. For a user, 
+he need not care about which interface to implement. 
+They only need to care about the functions they need to implement
