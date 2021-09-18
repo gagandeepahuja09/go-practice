@@ -1,0 +1,23 @@
+* A factory of factories
+* Idea is to group family of objects in factories and then group these families.
+
+Objectives:
+1. Provides a new layer of encapsulation for factory methods that returns 
+a common interface for all factories.
+2. Group common factories into a super factory(called factory of factories).
+
+Acceptance Criteria:
+1. We must retrieve a vehicle object returned by the abstract factory.
+2. MOST IMP ====> The vehicle must be a concrete implementation of a motorbike
+or a car that implements both inferface(that is Vehicle & Car or Vehicle & Motorbike).
+
+Entities:
+
+1. Vehicle interface: Must be implemented by all vehicles.
+2. Motorbike interface
+3. Car interface: added features like doors.
+4. VehicleFactory: An interface(abstract factory) that must be implement
+by other factories(CarFactory and MotorbikeFactory) to get the vehicle(getVehicle method)
+5. MotorbikeFactory: A factory that implements VehicleFactory interface to 
+return vehicle that implements the Vehicle and Motorbike interface.
+6. CarFactory
