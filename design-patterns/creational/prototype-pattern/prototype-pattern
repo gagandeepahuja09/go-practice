@@ -1,0 +1,16 @@
+* Aim is to have a set of objects that are already created at compilation time but which can clone as many
+times you want at runtime.
+* Eg. default template in web pages / default pricing plan.
+* Difference b/w this and builder ==> Objects are cloned for the user instead of building them at run time.
+* You can also build a cache-like solution.
+
+Objective
+* Maintain a set of objects that will be cloned to create new instances.
+* Free CPU of complex object initialization to take more memory resources.
+
+Acceptance Criteria
+1. To have a shirt-cloner interface to ask for different types of shirts.
+2. The new instance(clone) created must be different from the original one.
+3. SKU of the created objected shouldn't affect new object creation.
+4. An info method must give all the information available on the instance fields,
+including the updated SKU.
