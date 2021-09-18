@@ -11,5 +11,5 @@ const (
 )
 
 func GetShirtsCloner() ShirtCloner {
-	return nil
+	return new(ShirtsCache)
 }

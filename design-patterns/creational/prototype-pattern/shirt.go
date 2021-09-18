@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type ShirtColor byte
 
 type Shirt struct {
@@ -9,7 +11,8 @@ type Shirt struct {
 }
 
 func (s *Shirt) GetInfo() string {
-	return ""
+	return fmt.Sprintf("Shirt with SKU %s and color id %d that costs around %f",
+		s.SKU, s.Color, s.Price)
 }
 
 var whitePrototype *Shirt = &Shirt{
