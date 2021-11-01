@@ -28,7 +28,7 @@ func main() {
 	}
 
 	// one of the values in state1 holds the counter. which increases and decreases
-	// depending on Add and Done
+	// if the count of add and done don't match, then we'll get an error.
 	fmt.Printf("%#v\n", waitGroup)
 	waitGroup.Wait()
 	fmt.Println("\nExiting....")
