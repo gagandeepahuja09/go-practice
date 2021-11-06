@@ -9,7 +9,7 @@ type client struct {
 	// socket is the websocket used for this client.
 	socket *websocket.Conn
 	// send is a buffered which is used to queue the received messages
-	// read to be forwarded to the client's browser
+	// ready to be forwarded to the client's browser
 	send chan []byte
 	// room is the room the client is chatting in
 	room *room
