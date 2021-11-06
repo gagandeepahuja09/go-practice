@@ -1,5 +1,12 @@
 package main
 
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/websocket"
+)
+
 type room struct {
 	// forward is a channel that will hold incoming messages that should be
 	// forwarded to other clients
@@ -45,4 +52,37 @@ func (r *room) run() {
 			}
 		}
 	}
+}
+
+const (
+	socketBufferSize  = 1024
+	messageBufferSize = 256
+)
+
+// in order to use websockets, we must upgrade the HTTP connection using upgrader.upgrade
+var upgrader = &websocket.Upgrader{ReadBufferSize: socketBufferSize,
+	WriteBufferSize: socketBufferSize}
+
+func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	// create a socket using upgrade
+	socket, err := upgrader.Upgrade(w, req, nil)
+	if err != nil {
+		log.Fatal("ServeHTTP:", err)
+		return
+	}
+
+	// create a client
+	client := &client{
+		socket: socket,
+		send:   make(chan []byte, messageBufferSize),
+		room:   r,
+	}
+
+	// make the client join the room
+	r.join <- client
+
+	defer func() { r.leave <- client }()
+	go client.write()
+
+	client.read()
 }
