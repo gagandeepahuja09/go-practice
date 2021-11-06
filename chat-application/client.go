@@ -20,8 +20,10 @@ type client struct {
 func (c *client) read() {
 	for {
 		if _, msg, err := c.socket.ReadMessage(); err == nil {
-			// forward to other clients
+			// store the message in forward channel
 			c.room.forward <- msg
+			// the http handler for message will read from forward
+			// and send to the send channel of all clients.
 		} else {
 			break
 		}
