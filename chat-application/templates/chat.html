@@ -31,7 +31,10 @@
                 if (!window["WebSocket"]) {
                     alert("Error: Your browser does not support using web sockets.");
                 } else {
-                    socket = new WebSocket("ws://localhost:8080/room");
+                    // to use the host value of http.Request, we can make use of 
+                    // special template syntax that allows the inject data
+                    // {{.Host}} ===> request.Host 
+                    socket = new WebSocket("ws://{{.Host}}/room");
                     socket.onclose = function() {
                         alert("Connection has been closed.");
                     }

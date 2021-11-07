@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -19,7 +20,10 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		t.templ = template.Must(
 			template.ParseFiles(filepath.Join("templates", t.fileName)))
 	})
-	t.templ.Execute(w, nil)
+	// pass the details of the request as data
+	// this tells the template to render itself using data that can be extract from
+	// http.Request which happens to include the host address.
+	t.templ.Execute(w, r)
 }
 
 func newRoom() *room {
@@ -32,6 +36,8 @@ func newRoom() *room {
 }
 
 func main() {
+	var addr = flag.String("addr", ":8080", "The address of the application")
+	flag.Parse()
 	r := newRoom()
 	http.Handle("/", &templateHandler{fileName: "chat.html"})
 	http.Handle("/room", r)
@@ -40,7 +46,7 @@ func main() {
 	// occurs in the background, allowing our main thread to run the web server.
 	go r.run()
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal("Listen and serve:", err)
 	}
 }
