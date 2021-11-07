@@ -16,7 +16,7 @@ type client struct {
 }
 
 // read method is read for the websocket, which means it will read the messages
-// written by the client
+// written by the client sent from the frontend
 func (c *client) read() {
 	for {
 		if _, msg, err := c.socket.ReadMessage(); err == nil {
