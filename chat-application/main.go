@@ -4,9 +4,12 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"sync"
 	"text/template"
+
+	"go-practice.com/chat-application/trace"
 )
 
 type templateHandler struct {
@@ -39,6 +42,7 @@ func main() {
 	var addr = flag.String("addr", ":8080", "The address of the application")
 	flag.Parse()
 	r := newRoom()
+	r.tracer = trace.New(os.Stdout)
 	http.Handle("/", &templateHandler{fileName: "chat.html"})
 	http.Handle("/room", r)
 
