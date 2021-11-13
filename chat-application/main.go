@@ -45,7 +45,8 @@ func main() {
 	flag.Parse()
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
-	http.Handle("/", &templateHandler{fileName: "chat.html"})
+	http.Handle("/chat", MustAuth(&templateHandler{fileName: "chat.html"}))
+	http.Handle("/login", &templateHandler{fileName: "login.html"})
 	http.Handle("/room", r)
 
 	// we are running the room in a separate goroutine so that the chatting operation
