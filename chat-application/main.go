@@ -35,6 +35,8 @@ func newRoom() *room {
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
+		// by default will be created with a nil tracer
+		tracer: trace.Off(),
 	}
 }
 
