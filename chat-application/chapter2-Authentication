@@ -8,3 +8,5 @@ What we will learn:
 * Send and receive JSON data over a websocket.
 * Give different types of data to templates.
 * Work with channels of our own type.
+
+* authHandler will just redirect to another handler if all conditions are met.
