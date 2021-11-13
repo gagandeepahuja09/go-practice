@@ -10,6 +10,8 @@ type Tracer interface {
 	Trace(...interface{})
 }
 
+// this is unexported(lowercase) as the user will never be directly interacting with it.
+// the user will be interacting with New, Trace method and the Tracer interface.
 type tracer struct {
 	out io.Writer
 }
