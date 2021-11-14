@@ -48,6 +48,7 @@ func main() {
 	http.Handle("/chat", MustAuth(&templateHandler{fileName: "chat.html"}))
 	http.Handle("/login", &templateHandler{fileName: "login.html"})
 	http.Handle("/room", r)
+	http.HandleFunc("/auth/", loginHandler)
 
 	// we are running the room in a separate goroutine so that the chatting operation
 	// occurs in the background, allowing our main thread to run the web server.

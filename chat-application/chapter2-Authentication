@@ -10,3 +10,19 @@ What we will learn:
 * Work with channels of our own type.
 
 * authHandler will just redirect to another handler if all conditions are met.
+
+******************************
+
+oAuth2
+* Open authentication & authorization standard designed to allow resource owners to 
+ give clients delegated access to private data (such as wall posts or tweets) via an
+ exchange token handshake.
+* Even if we don't want to access the private data, if gives a great option to sign in
+ using their existing credentials without exposing them to the 3rd party site.
+
+oAuth2 flow for user's point of view:
+* User selects the provider.
+* Redirected to provider's website where they are asked to give permission to the 
+ client app.
+* User accpets the permission
+* User is redirected to the client app with a request code.
