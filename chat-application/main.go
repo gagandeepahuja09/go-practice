@@ -9,6 +9,8 @@ import (
 	"sync"
 	"text/template"
 
+	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/providers/google"
 	"go-practice.com/chat-application/trace"
 )
 
@@ -40,11 +42,28 @@ func newRoom() *room {
 	}
 }
 
+func setUpGomniauth() {
+	// sends state data b/w the client & server along with a signature checksum.
+	// checksum ensures that the state values haven't been tampered with while transmiting.
+	// the security key is used for creating the hash in a way that it is impossible
+	// to recreate the same hash.
+	gomniauth.SetSecurityKey("there_goes_name_of_mine_gagandeep_singh_ahuja_some_long_key_here_goes_here")
+	gomniauth.WithProviders(
+		google.New("321365375874-75ehdnd9f0128st7tdraqnr552uicl47.apps.googleusercontent.com",
+			"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",
+			"http://localhost:8080/auth/callback/google"),
+	)
+}
+
 func main() {
 	var addr = flag.String("addr", ":8080", "The address of the application")
 	flag.Parse()
+
+	setUpGomniauth()
+
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
+
 	http.Handle("/chat", MustAuth(&templateHandler{fileName: "chat.html"}))
 	http.Handle("/login", &templateHandler{fileName: "login.html"})
 	http.Handle("/room", r)

@@ -26,3 +26,14 @@ oAuth2 flow for user's point of view:
  client app.
 * User accpets the permission
 * User is redirected to the client app with a request code.
+* The client app sends the grant code to the provider, who sends back an auth token.
+* The client app uses the access token to make authorized requests to the provider.
+
+
+Tell the authentication providers about our app
+* There is generally a dashbaord / console for it.
+* In order to identify the client application, we need to create a client ID and secret.
+* We will also be asked about the redirect URI, the endpoint to which the user will 
+be redirected after signing in.
+* The callback will be another action on our loginHandler, so the redirection URL will 
+be like: localhost:8080/auth/callback/google.
