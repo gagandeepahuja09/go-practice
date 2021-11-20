@@ -11,6 +11,7 @@ import (
 
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
+	"github.com/stretchr/objx"
 	"go-practice.com/chat-application/trace"
 )
 
@@ -25,10 +26,19 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		t.templ = template.Must(
 			template.ParseFiles(filepath.Join("templates", t.fileName)))
 	})
+
+	// set the UserData so that it can be used in templates.
+	data := map[string]interface{}{
+		"Host": r.Host,
+	}
+
+	if authCookie, err := r.Cookie("auth"); err == nil {
+		data["UserData"] = objx.MustFromBase64(authCookie.Value)
+	}
 	// pass the details of the request as data
 	// this tells the template to render itself using data that can be extract from
 	// http.Request which happens to include the host address.
-	t.templ.Execute(w, r)
+	t.templ.Execute(w, data)
 }
 
 func newRoom() *room {
