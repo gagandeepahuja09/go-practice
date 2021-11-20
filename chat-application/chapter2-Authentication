@@ -47,11 +47,26 @@ http://localhost:8080/auth/callback/google?code=4%2F0AX4XfWiFOXr5opMmy_8fpIhwzW5
 access the private user data. For added security, this step happens behind the scenes,
 from server to server rather than within the browser.
 
+
 * Implementing our callback handler.
 * The callback handler will be the redirect uri.
 * Extract the creds from code=query param.
 * Extract the user from the creds. The above 2 steps will be done by a 3rd party oAuth proivder like  gomniauth.
 * After extract the user details, we will set the cookie which will contain the user name, base 64 encoded.
 
+
 * Presenting the user data
 * Update the serveHTTP of the template handler so that we can inject some data into it.
+
+
+* Augmenting messages with additional data
+* Additional data to be added in message: message sender, timestamp.
+* create a new message struct.
+* In client.go, we will replace readMessage, writeMessage with readJSON, writeJSON.
+* Replace all structs with using message struct instead of []byte.
+* In the handler of /room, we create a new client. While creating the new 
+client we should set the userData field also in it.
+* This will be later used in message.Name.
+* While reading from the frontend in the read method implemented in client.go, we 
+make sure that we set the name and timestamp.
+* While sending and receiving from the frontend, we make sure that we pass the required JSON(stringified) and show the appropriate name and message.

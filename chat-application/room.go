@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/stretchr/objx"
 	"go-practice.com/chat-application/trace"
 )
 
 type room struct {
 	// forward is a channel that will hold incoming messages that should be
 	// forwarded to other clients
-	forward chan []byte
+	forward chan *message
 
 	// join is a channel for clients wishing to join the room
 	join chan *client
@@ -78,11 +79,19 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	authCookie, err := req.Cookie("auth")
+
+	if err != nil {
+		log.Fatal("Failed to get auth cookie:", err)
+	}
+
 	// create a client
 	client := &client{
 		socket: socket,
-		send:   make(chan []byte, messageBufferSize),
+		send:   make(chan *message, messageBufferSize),
 		room:   r,
+		// set the user data also at this time. will require user data from cookie
+		userData: objx.MustFromBase64(authCookie.Value),
 	}
 
 	// make the client join the room
