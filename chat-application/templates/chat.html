@@ -41,6 +41,7 @@
                     }
                     socket.onmessage = function(e) {
                         var msg = JSON.parse(eval("(e.data)"))
+                        console.log(msg.When)
                         messages.append(
                             $("<li>").append(
                                 $("<strong>").text(msg.Name + ": "),
