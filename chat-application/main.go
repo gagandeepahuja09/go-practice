@@ -65,6 +65,18 @@ func setUpGomniauth() {
 	)
 }
 
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:   "auth",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	})
+
+	w.Header().Set("Location", "/chat")
+	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
 func main() {
 	var addr = flag.String("addr", ":8080", "The address of the application")
 	flag.Parse()
@@ -78,6 +90,7 @@ func main() {
 	http.Handle("/login", &templateHandler{fileName: "login.html"})
 	http.Handle("/room", r)
 	http.HandleFunc("/auth/", loginHandler)
+	http.HandleFunc("/logout", logoutHandler)
 
 	// we are running the room in a separate goroutine so that the chatting operation
 	// occurs in the background, allowing our main thread to run the web server.

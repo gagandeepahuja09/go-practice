@@ -26,3 +26,9 @@ Getting the avatar URL
 * Hence the provider does it. Different providers do things differently. Github has a avatar_url field. Google ==> picture, Fb ==> picture.url.
 * Luckily gomniauth abstracts this for us. user.AvatarURL.
 * We will store this in the cookie.
+
+Logging Out
+* We set the cookie and mark the maxAge as -1. After that we redirect to the /chat route which will in turn redirect to the login page.
+* Max age of -1 indicates that it should be immediately deleted by the browser.
+* Not all browsers are forced to delete the cookie, which is why we provide a new Value setting it to an empty string thus removing the old data that was set.
+* We should update in our authHandler to handle the case where value of r.Cookie("auth") is not set. ie r.Cookie("auth").Value == "".
