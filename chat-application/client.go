@@ -27,6 +27,10 @@ func (c *client) read() {
 		if err := c.socket.ReadJSON(&msg); err == nil {
 			msg.When = time.Now()
 			msg.Name = c.userData["name"].(string)
+			// avatar url might not always be set
+			if avatarUrl, ok := c.userData["avatar_url"]; ok {
+				msg.AvatarURL = avatarUrl.(string)
+			}
 			// store the message in forward channel
 			c.room.forward <- msg
 			// the http handler for message will read from forward

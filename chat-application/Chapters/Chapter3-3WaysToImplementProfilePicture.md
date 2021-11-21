@@ -14,3 +14,15 @@ Learnings:
 * Serving static files through our web server.
 * Using unit tests to guide the refactoring of code.
 * How and when to abstract functionality from struct types into interfaces. 
+
+***************************************************************************************
+
+Avatars from the OAuth2 server
+
+* To use this, we need to get the image URL from the provider, store it in the cookie for our user and send it through a websocket so that every client can render the picture alongside the corresponding message.
+
+Getting the avatar URL
+* Schema for user profile is not a part of the OAuth2 spec.
+* Hence the provider does it. Different providers do things differently. Github has a avatar_url field. Google ==> picture, Fb ==> picture.url.
+* Luckily gomniauth abstracts this for us. user.AvatarURL.
+* We will store this in the cookie.
