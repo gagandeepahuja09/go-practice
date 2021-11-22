@@ -41,7 +41,7 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, data)
 }
 
-func newRoom() *room {
+func newRoom(avatar Avatar) *room {
 	return &room{
 		forward: make(chan *message),
 		join:    make(chan *client),
@@ -49,6 +49,7 @@ func newRoom() *room {
 		clients: make(map[*client]bool),
 		// by default will be created with a nil tracer
 		tracer: trace.Off(),
+		avatar: avatar,
 	}
 }
 
@@ -83,7 +84,9 @@ func main() {
 
 	setUpGomniauth()
 
-	r := newRoom()
+	// we don't have to create an instance of authAvatar, so no memory was
+	// allocated.
+	r := newRoom(UseAuthAvatar)
 	r.tracer = trace.New(os.Stdout)
 
 	http.Handle("/chat", MustAuth(&templateHandler{fileName: "chat.html"}))

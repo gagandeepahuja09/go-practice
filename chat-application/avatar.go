@@ -13,3 +13,18 @@ type Avatar interface {
 	// client.
 	GetAvatarURL(c *client) (string, error)
 }
+
+type AuthAvatar struct{}
+
+var UseAuthAvatar AuthAvatar
+
+// this doesn't have a very nice line of sight as the return is buried inside
+// refactor it.
+func (AuthAvatar) GetAvatarURL(c *client) (string, error) {
+	if url, ok := c.userData["avatar_url"]; ok {
+		if urlString, ok := url.(string); ok {
+			return urlString, nil
+		}
+	}
+	return "", ErrNoAvatarURL
+}
