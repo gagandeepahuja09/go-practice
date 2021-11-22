@@ -86,6 +86,7 @@ func main() {
 
 	// we don't have to create an instance of authAvatar, so no memory was
 	// allocated.
+	// Imagine the size of the potential savings if our room had 1000s of rooms.
 	r := newRoom(UseAuthAvatar)
 	r.tracer = trace.New(os.Stdout)
 

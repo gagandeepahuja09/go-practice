@@ -38,3 +38,10 @@ Abstracting the Avatar URL process
 * Abstraction: seperating the idea of something from its implementation.
 * http.Handler is a great example of this.
 * The Avatar interface describes the GetAvatarURL that a type must satify in order to be able to get the avatar URL.
+* We created an interface for Avatar, wrote tests for our AuthAvatar type and then
+implemented it.
+* code readability is important 
+* const animate = true, const dontAnimate = false, move(animate), move(dontAnimate)
+* is much better than move(true), move(false)
+
+Using the implementation of authAvatar
