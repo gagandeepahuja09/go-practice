@@ -7,7 +7,7 @@ type hasItemState struct {
 }
 
 func (i *hasItemState) addItem(count int) error {
-	fmt.Printf("%s Items to be added\n", count)
+	fmt.Printf("%d Items to be added\n", count)
 	i.vendingMachine.incrementItemCount(count)
 	return nil
 }

@@ -18,7 +18,7 @@ as much as we can, because we aren't always aware of the implications.
 for adapter pattern.
 
 * Example: We have an old printer interface and a new one. Users of the old interface
-don't expect the signature that the old one has, and we need an adapter so that users
+don't expect the signature that the new one has, and we need an adapter so that users
 can use the old implementations if necessary(to work with some legacy code).
 
 * Requirement: Create a structure that can implement the new interface and use the

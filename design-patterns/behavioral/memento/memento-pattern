@@ -1,0 +1,17 @@
+* When to use it: When we want to create undoable operations eg. when writing UI 
+applications / during transactional operations.
+* Have a finite amount of states and we can recover them if necessary for a 
+wide variety of tasks: undo operations, historic, etc.
+* 3 Actors:
+    * Memento: It stores the type that we want to save. It's an extra layer of
+        abstraction over the state.
+    * Originator: It is in charge of creating mementos and storing the current
+        active state.
+    * Caretaker: It stores the list of mementos.
+    
+Objectives:
+* We need to store a finite amount of states.
+* We need a way to restore the current store state to one of the state list.
+* Why don't we use originator directly?
+* To save the state of something could be as simple as taking a value or as complex as 
+ to maintain the state of some distributed application.

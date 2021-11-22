@@ -32,3 +32,9 @@ Logging Out
 * Max age of -1 indicates that it should be immediately deleted by the browser.
 * Not all browsers are forced to delete the cookie, which is why we provide a new Value setting it to an empty string thus removing the old data that was set.
 * We should update in our authHandler to handle the case where value of r.Cookie("auth") is not set. ie r.Cookie("auth").Value == "".
+
+Abstracting the Avatar URL process
+* Since we have 3 different ways of obtaining the URL, abstracting the functionality makes a lot more sense.
+* Abstraction: seperating the idea of something from its implementation.
+* http.Handler is a great example of this.
+* The Avatar interface describes the GetAvatarURL that a type must satify in order to be able to get the avatar URL.

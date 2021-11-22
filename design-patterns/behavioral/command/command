@@ -1,0 +1,5 @@
+* Suggest encapsulating the request as a standalone object.
+* To delegate the responsiblity
+* Use case:
+1. All invokers need not implement their own version for invoking the receiver.
+  

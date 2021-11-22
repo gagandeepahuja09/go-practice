@@ -1,0 +1,13 @@
+* It wraps an object to hide some of its characteristics.
+* These characteristics could be the fact like it is a remote object(remote proxy),
+a very big image or the dump of a terabyte database(virtual proxy), or a restricted 
+access object(protection proxy).
+
+
+Objectives:
+* Hide an object behind a proxy so that features can be hidden, restricted and so on.
+* Provide a new abstraction layer that can be easy to work with and can be changed easily.
+
+Proxying around actions:
+* We also wrap proxies around types that need some intermediate actions like giving
+authorization to a user, and providing access to DB, cache before DB.

@@ -3,3 +3,10 @@
 * Toppings in pizza: you add some price to existing base pizza
 * It will both implement the pizza interface and have pizza embedded
  in it's struct
+* Decorator and Adapter design patterns are quite similar.
+* Used in cases where we don't want to modify the legacy code and follow 
+the open/close principle.
+
+* More examples: 
+* We want to add logging functionalities to our http handler.
+* We want to add an authentication middleware to our http handler.
