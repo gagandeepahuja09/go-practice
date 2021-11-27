@@ -60,3 +60,13 @@ Upload Form in the UI
 * The enctype attribute must be multipart/form-data so that the browser can transmit binary data over HTTP.
 * Input of type file.
 * userid is included in the form from UserData. This will tell us which user is uploading a file.
+
+Handling the Upload
+* This will receive the file, read the bytes that are streamed through the connection, and save it as a new file in the server.
+* Try to write code that uses the simplest interface type you can find.
+* multipart.File, multipart.Header will be returned when we try to read the req form file.
+* multipart.Header will contain all metadata related to the file.
+* multipart.File ==> is also an io.Reader
+* we'll read it using ioutil.ReadAll()
+* filename will be that of the userId along with extension taken from the header filename.
+

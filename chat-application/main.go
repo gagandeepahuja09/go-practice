@@ -96,6 +96,7 @@ func main() {
 	http.Handle("/room", r)
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
+	http.HandleFunc("/uploader", uploadHandler)
 
 	// we are running the room in a separate goroutine so that the chatting operation
 	// occurs in the background, allowing our main thread to run the web server.
