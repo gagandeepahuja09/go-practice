@@ -54,3 +54,9 @@ User Identification
 * We' ll use the same approach as gravatar for user identification. MD5 hash for email.
 * We' ll store this user_id in the cookie.
 * This will also help in removing the ineffeciency caused by the continuous hashing. Now we need to do it only once for a user session rather than doing it for every image.
+
+Upload Form in the UI
+* The form action will point to /uploader route.
+* The enctype attribute must be multipart/form-data so that the browser can transmit binary data over HTTP.
+* Input of type file.
+* userid is included in the form from UserData. This will tell us which user is uploading a file.

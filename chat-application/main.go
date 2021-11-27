@@ -92,6 +92,7 @@ func main() {
 
 	http.Handle("/chat", MustAuth(&templateHandler{fileName: "chat.html"}))
 	http.Handle("/login", &templateHandler{fileName: "login.html"})
+	http.Handle("/upload", &templateHandler{fileName: "upload.html"})
 	http.Handle("/room", r)
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
