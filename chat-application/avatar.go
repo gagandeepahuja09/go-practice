@@ -1,11 +1,8 @@
 package main
 
 import (
-	"crypto/md5"
 	"errors"
 	"fmt"
-	"io"
-	"strings"
 )
 
 // this error is returned when the avatar instance is unable to provide an avatar URL.
@@ -37,12 +34,12 @@ func (AuthAvatar) GetAvatarURL(c *client) (string, error) {
 
 type GravatarAvatar struct{}
 
+var UseGravatar GravatarAvatar
+
 func (GravatarAvatar) GetAvatarURL(c *client) (string, error) {
-	if email, ok := c.userData["email"]; ok {
-		if emailStr, ok := email.(string); ok {
-			m := md5.New()
-			io.WriteString(m, strings.ToLower(emailStr))
-			return fmt.Sprintf("//www.gravatar.com/avatar/%x", m.Sum(nil)), nil
+	if userId, ok := c.userData["userid"]; ok {
+		if userIdStr, ok := userId.(string); ok {
+			return fmt.Sprintf("//www.gravatar.com/avatar/%x", userIdStr), nil
 		}
 	}
 	return "", ErrNoAvatarURL

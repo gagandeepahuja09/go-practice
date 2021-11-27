@@ -45,3 +45,12 @@ implemented it.
 * is much better than move(true), move(false)
 
 Using the implementation of authAvatar
+Implementing and using Gravatar
+
+
+Uploading An Avatar Picture
+
+User Identification
+* We' ll use the same approach as gravatar for user identification. MD5 hash for email.
+* We' ll store this user_id in the cookie.
+* This will also help in removing the ineffeciency caused by the continuous hashing. Now we need to do it only once for a user session rather than doing it for every image.
