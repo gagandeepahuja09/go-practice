@@ -74,4 +74,10 @@ Serving the Images
 * To make them accessible to the browser.
 * We do this using http's built-in file server ==> http.FileServer.
 * The file listing will be accessible on this route. If image, it will be displayed, else will be available for download. 
+* To get a single image, we can modify the route from /avatars to /avatars/{filename.extension}
+
+Avatar Implementation For Local Files
+* We have to implement the Avatar interface for FileSystemAvatar.
+* For that, let's first write tests to ensure that GetAvatarURL returns the correct required url.
+
 

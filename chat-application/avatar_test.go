@@ -1,6 +1,11 @@
 package main
 
-import "testing"
+import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"testing"
+)
 
 // if error is returned, it should always be ErrNoAvatarURL.
 // happy flow, set the user data for client.
@@ -41,5 +46,28 @@ func TestGravatarAvatar(t *testing.T) {
 	}
 	if url != "//www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346" {
 		t.Errorf("gravatarAvatar.GetAvatarURL wrongly returned %s", url)
+	}
+}
+
+func TestFileSystemAvatar(t *testing.T) {
+	// create a client
+	// create a file in avatars dir. Make sure to close it after the test
+	fileName := filepath.Join("avatar", "abc.jpg")
+	ioutil.WriteFile(fileName, []byte{}, 0777)
+	defer os.Remove(fileName)
+
+	var fileSystemAvatar FileSystemAvatar
+
+	client := new(client)
+	client.userData = map[string]interface{}{
+		"userid": "abc",
+	}
+
+	url, err := fileSystemAvatar.GetAvatarURL(client)
+	if err != nil {
+		t.Error("fileSystemAvatar GetAvatarURL should not return an error")
+	}
+	if url != "/avatars/abc.jpg" {
+		t.Errorf("fileSystemAvatar GetAvatarURL wrongly returned url %s", url)
 	}
 }
