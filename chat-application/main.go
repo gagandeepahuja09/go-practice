@@ -94,6 +94,9 @@ func main() {
 	http.Handle("/login", &templateHandler{fileName: "login.html"})
 	http.Handle("/upload", &templateHandler{fileName: "upload.html"})
 	http.Handle("/room", r)
+	http.Handle("/avatars/",
+		http.StripPrefix("/avatars",
+			http.FileServer(http.Dir("./avatars"))))
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/uploader", uploadHandler)

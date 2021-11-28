@@ -70,3 +70,8 @@ Handling the Upload
 * we'll read it using ioutil.ReadAll()
 * filename will be that of the userId along with extension taken from the header filename.
 
+Serving the Images
+* To make them accessible to the browser.
+* We do this using http's built-in file server ==> http.FileServer.
+* The file listing will be accessible on this route. If image, it will be displayed, else will be available for download. 
+
