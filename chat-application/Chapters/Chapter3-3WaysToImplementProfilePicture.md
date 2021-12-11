@@ -100,4 +100,6 @@ Refactoring And Optimizing Our Code
 
 Changing interfaces in a test-driven way
 * Before changing the implementations, we'll update the tests of each of the 3 implementations.
+* Adding test of AuthAvatar. This uses gomniauth's avatar URL. Hence for tests, we'll use gomniauth's mock methods so that gomniauth's AvatarURL method returns the desired result.
+* For updating the other two tests, we only need to focus on the uniqueId.
 
