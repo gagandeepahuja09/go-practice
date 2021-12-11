@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"path"
 )
 
 // this error is returned when the avatar instance is unable to provide an avatar URL.
@@ -52,7 +54,18 @@ var UseFileSystemAvatar FileSystemAvatar
 func (FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
 	if userId, ok := c.userData["userid"]; ok {
 		if userIdStr, ok := userId.(string); ok {
-			return "/avatars/" + userIdStr + ".png", nil
+			files, err := ioutil.ReadDir("avatars")
+			if err != nil {
+				return "", ErrNoAvatarURL
+			}
+			for _, file := range files {
+				if file.IsDir() {
+					continue
+				}
+				if match, _ := path.Match(userIdStr+"*", file.Name()); match {
+					return "/avatars" + file.Name(), nil
+				}
+			}
 		}
 	}
 	return "", ErrNoAvatarURL

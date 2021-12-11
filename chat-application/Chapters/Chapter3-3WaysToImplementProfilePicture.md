@@ -80,4 +80,9 @@ Avatar Implementation For Local Files
 * We have to implement the Avatar interface for FileSystemAvatar.
 * For that, let's first write tests to ensure that GetAvatarURL returns the correct required url.
 
+Supporting different file types
+* Instead of just blindly building the string, we will use ioutil.ReadDir to get a listing of the files.
+* The listing will also include directories, so we will ensure that we don't read through a directory using isDir.
+* We will check where each file matches the userId by a call to path.Match. Here we will use the regex pattern of userIdStr + "*" for matching.
+
 
