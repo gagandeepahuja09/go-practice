@@ -103,3 +103,6 @@ Changing interfaces in a test-driven way
 * Adding test of AuthAvatar. This uses gomniauth's avatar URL. Hence for tests, we'll use gomniauth's mock methods so that gomniauth's AvatarURL method returns the desired result.
 * For updating the other two tests, we only need to focus on the uniqueId.
 
+* Now we can change our all 3 implementations:
+* This new implementation has not only allowed to incorporate saving of avatar url during authorization, but also helped in condensing the implementation and avoid too many null checks in all the three implementations.
+
