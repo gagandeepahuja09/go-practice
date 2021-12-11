@@ -86,3 +86,18 @@ Supporting different file types
 * We will check where each file matches the userId by a call to path.Match. Here we will use the regex pattern of userIdStr + "*" for matching.
 
 
+Refactoring And Optimizing Our Code
+
+* In our current implementation of file system avatar, we are iterating through all files in the directory and then matching for the correct file. This could become a scale problem for chatty users.
+* We should be caching this during authorization at cookie level.
+* Issues with doing that:
+    * In order to store this url during authorization, we'll need to call getAvatarURL which has client object as one of the parameter which won't be available during the authorization.
+    * One possible solution is that instead of passing client object, we'll pass all the necessary parameters.
+    * Problem with this is that with each new kind of implementation, we'll need to change our interface method as well.
+    * Instead we'll use an interface called chatUser which has two methods: UniqueID() and AvatarURL() in order to get the 2 properties which we care about.
+* We'll create a struct which implements it and gomniauth.common.User in it as it already has the implementation of AvatarURL() and now we only need to care about UniqueID() implementation.
+
+
+Changing interfaces in a test-driven way
+* Before changing the implementations, we'll update the tests of each of the 3 implementations.
+

@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	gomniauthtest "github.com/stretchr/gomniauth/test"
 )
 
 // if error is returned, it should always be ErrNoAvatarURL.
@@ -14,22 +16,25 @@ func TestAuthAvatar(t *testing.T) {
 	// since there is no state for our object, we won't waste any memory in
 	// initializing it.
 	var authAvatar AuthAvatar
-	client := new(client)
-	_, err := authAvatar.GetAvatarURL(client)
+	testUser := &gomniauthtest.TestUser{}
+	testUser.On("AvatarURL").Return("", ErrNoAvatarURL)
+
+	testChatUser := &chatUser{User: testUser}
+	url, err := authAvatar.GetAvatarURL(testChatUser)
 	if err != ErrNoAvatarURL {
-		t.Error("authAvatar.GetAvatarURL should return ErrNoAvatarURL when no avatar URL present")
+		t.Error("AuthAvatar.GetAvatarURL should return ErrNoAvatarURL when no value present")
 	}
 
-	testURL := "https://test-url.com"
-	client.userData = map[string]interface{}{
-		"avatar_url": testURL,
-	}
-	url, err := authAvatar.GetAvatarURL(client)
+	testUrl := "http://url-to-gravatar/"
+	testUser = &gomniauthtest.TestUser{}
+	testChatUser.User = testUser
+	testUser.On("AvatarURL").Return(testUrl, nil)
+	url, err = authAvatar.GetAvatarURL(testChatUser)
 	if err != nil {
 		t.Error("AuthAvatar.GetAvatarURL should return no error when value present")
 	}
-	if url != testURL {
-		t.Error("AuthAvatar.GetAvatarURL should return correct URL")
+	if url != testUrl {
+		t.Error("AuthAvatar.GetAvatarURL should return correct url")
 	}
 }
 
