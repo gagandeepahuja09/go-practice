@@ -106,3 +106,6 @@ Changing interfaces in a test-driven way
 * Now we can change our all 3 implementations:
 * This new implementation has not only allowed to incorporate saving of avatar url during authorization, but also helped in condensing the implementation and avoid too many null checks in all the three implementations.
 
+Implementing our new design
+* Now, we will implement our new design where we will ensure that the avatar url is set during authorization in the auth cookie.
+
