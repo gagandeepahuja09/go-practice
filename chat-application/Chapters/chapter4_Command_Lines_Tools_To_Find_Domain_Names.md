@@ -21,3 +21,35 @@ Pipe Design For Command-line tools
 * We'll make use of this feature to connect our various tools together.
 * eg. echo -n "Hello" | md5 ==> output of Hello is the input of md5 command.
 * When we don't use any pipe redirection, we'll able to directly work with programs using the default in and out which will be useful in testinf and debugging.
+
+
+Five Simple Programs
+* Sprinkle: Add some web-friendly sprinkle words to increase the chances of finding the available domain names.
+* Domainify: Removing unacceptable words for a domain. It will replace spaces with hyphens and add an appropriate top-level domain(.com, .net, etc).
+* Coolify: Changing a boring only normal word to web 2.0 by fiddling around with vowels.
+* Synonyms: Use 3rd party API to find synonyms.
+* Available: Will check to see whether a domain is available or not using appropriate WHOIS server.
+
+
+Sprinkle
+* Define an array of transformations.
+* Use bufio package to scan the input from stdin and fmt.Println in order to write the output to stdout.
+* Use math/rand to random select a transformation to apply.
+* Ideally should be created in GOPATH/src.
+computers can't actually generate random no.s But changing the seed gives the illusion that it can. As the seed would be different everytime the program is run.
+* Scanner allows to read blocks of bytes separated by defined delimiters, such as carriage return / linefeed characters.
+* We can use our own split function for the scanner or use one of the options built-in in the standard lib. eg. bufio.ScanWords.
+* Scan tells the scanner to read the next block of bytes. It returns a bool value indicating whether it found a value.
+* The bytes that are selected in Bytes method and the Text method gives us the same info converted from byte slice to string.
+* math/rand: insecure random numbers. crypto/rand: secure random no.s.
+* go build -o sprinkle ==> will build the executable file.
+* Can be run using ./sprinkle ==> then keep on typing chat to see different outputs.
+* Also we can pipe the result of echo command to our application.
+echo "chat" | ./sprinkle
+
+
+Domainify
+* The output from sprinkle may contain spaces and other characters not allowed in domains.
+* Domainify will convert a line of text segment into acceptable domain and add an appropriate TLD(top level domain) to the end.
+* rune datatype is a type alias of int32, just used to differentiate for character values. 
+* To combine the above two applications, go to the parent directory and run the following: ./sprinkle/sprinkle | ./domainify/domainify
