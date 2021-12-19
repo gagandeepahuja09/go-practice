@@ -53,3 +53,15 @@ Domainify
 * Domainify will convert a line of text segment into acceptable domain and add an appropriate TLD(top level domain) to the end.
 * rune datatype is a type alias of int32, just used to differentiate for character values. 
 * To combine the above two applications, go to the parent directory and run the following: ./sprinkle/sprinkle | ./domainify/domainify
+
+
+Coolify
+* When domain names for common words are already taken and it's common to play around with words and add or remove vowels.
+* String manipulation using go specific methods like append which use variadic functions.
+* Go's method if reprsenting substrings using [start:end]
+* Only end mentioned: [:end] ==> prefix
+* Only start mentioned: [start:] ==> suffix
+* There are 2 cases to handle here: duplicate vowel or remove vowel. Will use random no. to decide on that.
+* We will use append method to do the string manipulation. append has following parameters: first is the original string and the second are n no.s in order which we want to append.
+* For remove vowel, it means the we have 0...i-1 followed by i+1...end ==> this means first parameter would be v[:i-1] and the second one would be all no. from i+1...end. We can rather express it in variadic form as v[i+1:]...
+* Golang is smart enough here to handle cases like i == 0 and i == n, etc.
