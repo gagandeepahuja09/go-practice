@@ -65,3 +65,19 @@ Coolify
 * We will use append method to do the string manipulation. append has following parameters: first is the original string and the second are n no.s in order which we want to append.
 * For remove vowel, it means the we have 0...i-1 followed by i+1...end ==> this means first parameter would be v[:i-1] and the second one would be all no. from i+1...end. We can rather express it in variadic form as v[i+1:]...
 * Golang is smart enough here to handle cases like i == 0 and i == n, etc.
+
+
+Synonyms
+* Unlike sprinkle and domainify, synonyms will print more than one result. Not an issue as our applications have the ability to handle more than one lines of input.
+* Using environment variable as configuration
+
+Using environment variables for configuration
+* API key is a sensitive piece of info. If we store it in const, we won't be able to share our code without sharing our API key.
+* Additionally, we'll have to recompile our entire project if the key expires or if we want to use a different one.
+* PHP uses this method: read_env_file($envDir, '.env.vault') to read the env file and $appEnvironment = env('APP_ENV') for read the flag.
+* For creating environment variable, you can run the export command or modify the bashrc file ~/.bashrc. Alternatively you could create multiple env files.
+* And will running the deployment, it would be an environment flag.
+* We'll use encoding/json package.
+* Question: defer response.Body.Close(). Why do we close the response body?
+* The good thing about strongly typed here is that we describe the type we expect beforehand. Eg. we expect that the synonyms json would contain two keys noun and verb and both of them would contain a key called syn which will be slice of strings.
+* We clearly indicate this in our two structs: type synonyms struct { Noun *words,Verb *words } and type words struct { Sync [] string }. 
