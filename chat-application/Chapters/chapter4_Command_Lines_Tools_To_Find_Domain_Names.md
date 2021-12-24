@@ -79,5 +79,11 @@ Using environment variables for configuration
 * And will running the deployment, it would be an environment flag.
 * We'll use encoding/json package.
 * Question: defer response.Body.Close(). Why do we close the response body?
-* The good thing about strongly typed here is that we describe the type we expect beforehand. Eg. we expect that the synonyms json would contain two keys noun and verb and both of them would contain a key called syn which will be slice of strings.
-* We clearly indicate this in our two structs: type synonyms struct { Noun *words,Verb *words } and type words struct { Sync [] string }. 
+* The good thing about strongly typed here is that we describe the type we expect from JSON data beforehand. Eg. we expect that the synonyms json would contain two keys noun and verb and both of them would contain a key called syn which will be slice of strings.
+* We clearly indicate this in our two structs: type synonyms struct { Noun *words,Verb *words } and type words struct { Sync [] string }. Interesting thing is that here we needed two structs for describing the JSON response in Go terms.
+* Since json.NewDecoder accepts an io.Reader in arguments, we can use response.Body as it is of type io.ReadCloser.
+* The Decode method of json.NewDecoder accepts an interface to which it modifies. Hence here it's addressed must be passed.
+* For returning the error string, we use Errors.New or fmt.Errorf.
+* log.Fatalln will write the error to the standard error stream.
+* We defer the closing of response body in order to keep the memory clean.
+* We can create an interface of Thesaurus, so that later other implementations can also be added like mariam-webster, dictionary.com, etc.
