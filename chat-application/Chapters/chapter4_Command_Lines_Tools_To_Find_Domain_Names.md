@@ -87,3 +87,6 @@ Using environment variables for configuration
 * log.Fatalln will write the error to the standard error stream.
 * We defer the closing of response body in order to keep the memory clean.
 * We can create an interface of Thesaurus, so that later other implementations can also be added like mariam-webster, dictionary.com, etc.
+* We have abstracted our thesaurus implementation in a package and now we can use it in our synonyms application.
+* log by default writes to the standard stream. log.fatal = log.print + os.Exit
+* We can use os.GetEnv to use the env variable flag.̃
