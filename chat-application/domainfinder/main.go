@@ -27,4 +27,18 @@ func main() {
 		}
 		nextCmd.Stdin = stdout
 	}
+
+	for _, cmd := range cmdChain {
+		if err := cmd.Start(); err != nil {
+			log.Fatalln(err)
+		} else {
+			defer cmd.Process.Kill()
+		}
+	}
+
+	for _, cmd := range cmdChain {
+		if err := cmd.Wait(); err != nil {
+			log.Fatalln(err)
+		}
+	}
 }
