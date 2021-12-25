@@ -31,3 +31,32 @@ Installing the environment
 * Services such as nsqd and mongod will have to be started before we can run our programs.
 * NSQ guarantees atleast once delivery. It means that it keeps undelivered messages cached until all interested parties have received them.
 * This means that even if we stop our counter program, we won't miss any votes.
+* The key tools from NSQ installation that we are going to use are: nsqlookupd, nsqd.
+* nsqlookupd is a deamon that manages topology information about the distributed NSQ environment. It keeps track of all the nsqd producers for specific topics and provides interfaces for clients to query such information.
+* nsqd is the deamon that does the heavy lifting for NSQ, such as receiving, queuing and delivering message to and from interested parties.
+* go get github.com/nsqio/go-nsq
+
+Installing MongoDB
+* brew services tap and brew install command.
+    To start mongodb/brew/mongodb-community now and restart at login:
+    brew services start mongodb/brew/mongodb-community
+    Or, if you don't want/need a background service you can just run:
+    mongod --config /usr/local/etc/mongod.conf
+
+MongoDB driver for go
+* go get gopkg.in/mgo.v2
+
+Starting the environment
+* Start nsqlookupd so that our nsqd environments are discoverable.
+* Start nsqd and tell which nsqlookup to use.
+* Start mongod for data services.
+
+1. nsqlookupd
+2. nsqd --lookupd-tcp-address=localhost:4160
+3. sudo mongod --dbpath /usr/local/var/mongodb/
+
+* All three in separate terminals.
+* dbpath is where the data will be stored
+
+
+Reading Votes From Twitter
