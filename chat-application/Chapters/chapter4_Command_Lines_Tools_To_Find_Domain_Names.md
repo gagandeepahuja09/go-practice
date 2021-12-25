@@ -46,7 +46,8 @@ computers can't actually generate random no.s But changing the seed gives the il
 * Can be run using ./sprinkle ==> then keep on typing chat to see different outputs.
 * Also we can pipe the result of echo command to our application.
 echo "chat" | ./sprinkle
-
+* Rather than hardcoding * everywhere, we have used a constant(otherWord) for it.
+* We have used strings.replace to replace otherWord.
 
 Domainify
 * The output from sprinkle may contain spaces and other characters not allowed in domains.
@@ -90,3 +91,29 @@ Using environment variables for configuration
 * We have abstracted our thesaurus implementation in a package and now we can use it in our synonyms application.
 * log by default writes to the standard stream. log.fatal = log.print + os.Exit
 * We can use os.GetEnv to use the env variable flag.̃
+
+
+
+Available
+
+* Available will connect to a WHOIS server to ask for details about the domain passed.
+* Programmatically parsing its response could be an issue.
+* In order to check whether a domain exists or not, we will dial up a tcp connection at the whois server.
+* Once the connection opens, we will simply write the domain followed by carriage return using os.Write(conn + "rn")
+* In order to iterate over the connection lines in the response, we will use bufio.NewScanner as connection is also an io.Reader.
+* We add a time.sleep of 1 second to ensure rate limiting at WHOIS server end.
+
+
+One Program to rule them all
+* Everytime we have to run, we have to type long messy lines and pipe them.
+* Here we need to build them. Overtime, the commands could change / increase or more steps could get added.
+* We'll use os/exec package to run sub programs and pipe them.
+* We'll keep our project in domainfinder. In that there will a lib folder which will keep build of all the subprograms. Since we don't want to copy and paste them everytime we make a change, we'll create a bash script.
+* This will contain echo statements + cd commands to move to corresponding subprograms + go build commands.
+* Give the execution rights to the script by running: chmod +x build.sh
+* Then simply run ./build.sh to execute the bash script.
+* We tie the input of first program with os.Stdin and output of last program with os.Stdout.
+* When iterating through the exec.commands we ensure that the input of (i + 1)th is the output of ith command.
+* For running each command, we'll use the cmd.Start method instead of Run. As run will block our program until the subprogram exists which will be no good since we'll have to run 5 subprograms at the same time.
+* If the program starts successful, we'll defer a call to kill the process (cmd.Process.Kill)
+* We then iterate over all commands and wait for them to finish. This is to ensure that the domainfinder doesn't exit early and kill off all the processes too soon.

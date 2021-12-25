@@ -28,7 +28,6 @@ func (b *BigHuge) Synonyms(term string) ([]string, error) {
 	defer response.Body.Close()
 
 	var data synonyms
-	defer response.Body.Close()
 	if err := json.NewDecoder(response.Body).Decode(&data); err != nil {
 		return syns, err
 	}
