@@ -68,3 +68,15 @@ twitter votes is going to do the following:
 * If the connection to twitter is dropped(which is common in long-running connections that are part of Twitter's streaming API connection), then after a short delay(so that we don't bombard Twitter with connection requests), reconnect and continue.
 * Periodically re-query MongoDB for the latest polls and refresh the connection to Twitter to make sure that we are always looking out for the right options.
 * Gracefully stop itself when the user terminates the connection by pressing Ctrl+C.
+
+
+Authorization with Twitter
+* Step1: Create an app in developer console of Twitter.
+* Create a new file called setup.sh to keep the creds.
+
+
+Extracting the Connection
+* In order to maintain long running connections, we'll create our very own dial method. This method will close the existing connection if it exists and setup a new connection with a timeout of 5 seconds. This connection will be maintained in a global variable conn.
+* If a connection dies or is closed by us, we can safely call this without having to worry about zombie connections.
+* We will periodically close the connection ourselves and initiate a new one because we want to reload the option from DB at regular intervals.
+* We'll also close io.ReadCloser in this method which we'll use to read the body of the responses.
