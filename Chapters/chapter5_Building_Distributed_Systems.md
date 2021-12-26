@@ -80,3 +80,5 @@ Extracting the Connection
 * If a connection dies or is closed by us, we can safely call this without having to worry about zombie connections.
 * We will periodically close the connection ourselves and initiate a new one because we want to reload the option from DB at regular intervals.
 * We'll also close io.ReadCloser in this method which we'll use to read the body of the responses.
+
+Reading Environment Variables
