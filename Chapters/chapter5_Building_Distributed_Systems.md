@@ -59,4 +59,12 @@ Starting the environment
 * dbpath is where the data will be stored
 
 
-Reading Votes From Twitter
+Reading Votes From Twitter(twittervotes)
+
+twitter votes is going to do the following:
+* Load all polls from the mongoDB database using mgo and collect all options from options array in each document.
+* Open and maintain a connection to Twitter's streaming APIs looking for any mention of the options.
+* Figure out which option is mentioned and push that option through to NSQ for each tweet that matches the filter.
+* If the connection to twitter is dropped(which is common in long-running connections that are part of Twitter's streaming API connection), then after a short delay(so that we don't bombard Twitter with connection requests), reconnect and continue.
+* Periodically re-query MongoDB for the latest polls and refresh the connection to Twitter to make sure that we are always looking out for the right options.
+* Gracefully stop itself when the user terminates the connection by pressing Ctrl+C.
