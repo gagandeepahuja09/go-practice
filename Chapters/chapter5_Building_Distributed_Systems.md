@@ -91,9 +91,27 @@ Making Request To Twitter
 * sync.Once.Do majorly does mutex lock and defers the unlock.
 * For making the request, we'll use an http client. 
 * In order to describe the mechanism by which the request is to be made, we'll use http.Transport.
-* Dial method in http.Transport is deprecated. If both a present, then dialContext takes prioriy. 
+* Dial method in http.Transport is deprecated. If both are present, then dialContext takes prioriy. 
 * dialContext allows to cancel dials as soon as they are no longer needed.
 * We'll also set important headers like Authorization headers, content-type, content-length.
 * for creating the authorization header string, we'll use oauth.Client.AuthorizationHeader method.
 * One limitation is that we have used oAuth 1 in code.
-* In the end we simple return the response of the call to client.Do. 
+* In the end we simply return the response of the call to client.Do. 
+
+Reading from MongoDB
+* dialdb, closedb functions will connect to and disconnect from the locally running mongodb instance.
+* It'll store mgo.Session(the database connection object) in a global variable called db. 
+
+Load Options From DB
+* We need to extract all options from the documents.
+* Our poll document contains more than just options but for new we only care about Options so only that will be present in our poll struct.
+* Variable of type poll is passed in iter.Next as address so that the struct gets changed accordingly.
+* We get an iterator by calling the Iter method which allows us to access each poll one by one.
+* This is a very memory efficient way of reading data because it only ever uses one single poll object.
+* If we were to use All method instead, the amount of memory used would depend on no. of DBs which could be out of our control.
+
+Scale Issues:
+* With millions of polls in the DB, the options slice would be too large. 
+* For that kind of scale, we can run multiple twittervotes programs, each dedicated to a portion of poll data.
+* A simple way could be to break on the basis of starting character, ie A-N and O-Z. This is similar to sharding but not actually for a particular DB(not DB sharding).
+* A more sophisticated approach would be to add a field to the poll document, one the basis of which we'll group the documents in a more balanced way.
