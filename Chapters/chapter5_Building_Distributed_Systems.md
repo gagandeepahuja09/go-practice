@@ -115,3 +115,20 @@ Scale Issues:
 * For that kind of scale, we can run multiple twittervotes programs, each dedicated to a portion of poll data.
 * A simple way could be to break on the basis of starting character, ie A-N and O-Z. This is similar to sharding but not actually for a particular DB(not DB sharding).
 * A more sophisticated approach would be to add a field to the poll document, one the basis of which we'll group the documents in a more balanced way.
+
+
+Reading from Twitter:
+* Now we'll write code that initiates the connection and continuously reads from the stream, until we either call our close connection method or twitter close the connection for some reason.
+* The structure of a tweet can be very complex but since we are only concerned with the tweet text, we'll only keep this in our struct.
+* This may look incomplete, but it makes our intentions very clear to other programmers who might see our code.
+* readFromTwitter method will keep on sending votes to the send only channel, votes. It is send only since it is of chan<- type. This makes our intentions very clear that we never intend to read the votes channel in our readFromTwitter method. 
+
+* Steps
+    * Get all options.
+    * Using url.Parse, get the appropriate url.URL object.
+    * We create a url.Values object called query and set the track field which has all the options.
+    * Create a request object using http.CreateRequest.
+    * Pass all this to the makeRequest method.
+    * We make a new decoder using response body.
+    * We keep reading inside an infinite for loop by calling the Decode method.
+    * If the tweet has mentioned some options, then send it to the votes channel.
