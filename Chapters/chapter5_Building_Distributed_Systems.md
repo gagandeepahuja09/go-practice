@@ -81,4 +81,19 @@ Extracting the Connection
 * We will periodically close the connection ourselves and initiate a new one because we want to reload the option from DB at regular intervals.
 * We'll also close io.ReadCloser in this method which we'll use to read the body of the responses.
 
-Reading Environment Variables
+Reading Environment Variables And Setting up Auth
+* go get github.com/gomodule/oauth1/oauth
+* go get github.com/joeshaw/envdecode
+
+Making Request To Twitter
+* Singleton Pattern: We use sync.once to ensure that our initialization code runs only once despite the number of times we call makeRequest.
+* After calling setupTwitterAuth, we create a new http.Client function using a http.Transport function that uses our custom dial method. 
+* sync.Once.Do majorly does mutex lock and defers the unlock.
+* For making the request, we'll use an http client. 
+* In order to describe the mechanism by which the request is to be made, we'll use http.Transport.
+* Dial method in http.Transport is deprecated. If both a present, then dialContext takes prioriy. 
+* dialContext allows to cancel dials as soon as they are no longer needed.
+* We'll also set important headers like Authorization headers, content-type, content-length.
+* for creating the authorization header string, we'll use oauth.Client.AuthorizationHeader method.
+* One limitation is that we have used oAuth 1 in code.
+* In the end we simple return the response of the call to client.Do. 
