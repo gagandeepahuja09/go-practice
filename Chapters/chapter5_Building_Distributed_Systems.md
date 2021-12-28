@@ -133,7 +133,8 @@ Reading from Twitter:
     * We keep reading inside an infinite for loop by calling the Decode method.
     * If the tweet has mentioned some options, then send it to the votes channel.
 
-* Starting Twitter Stream
+
+Starting Twitter Stream
 * Terminating the program whenever Decode returns an error doesn't provide a very robust solution. Doc states that API will drop the connection from time to time.
 * Also we are going to terminate the connection periodically, so we need to think about a way of reconnecting once the connection is dropped.
 * Continually calling the readFromTwitter after some delays, eg. 10 second delays will help.
@@ -151,3 +152,13 @@ Reading from Twitter:
 * Returning a channel in this function is necessary because our function triggers it's own goroutine and immediately returns, so without returning this calling code would have no idea whether the spawned code was still running or not.
 * Time.sleep is to give the twitter API some rest in case it closed the connection due to overuse. Once we've rested, we re-enter the loop and check if calling code wants us to stop or not.
 * NOTE: Signal channels are a great way to start and stop something when all code lives in a single package. If we need to cross API boundaries, context package is the recommended way to deal with deadlines, cancellation and stopping.
+
+
+Publishing to NSQ
+The votes channel is received by the publishVotes method, in order to publish these votes to NSQ under the votes topic. This is also achieved by goroutines, like a slice / array, we can iterate towards a channel using ⇒ for vote := range votes {}. After this we stop the publisher and send the stopChan signal. 
+* This will take channel of votes as receive only(<-chan) in input.
+* The channel we create later will be made using make(chan string) and won't be either receive / send only while declaring.
+* By closing the votes channel, the external code tells our function to stop working.
+* Once the votes channel is closed, we will stop publishing and send a signal down the returned stop signal channel. 
+* When it comes to sending the empty channel, we could have used defer as well.
+
