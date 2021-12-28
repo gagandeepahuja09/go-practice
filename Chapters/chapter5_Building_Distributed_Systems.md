@@ -168,3 +168,8 @@ Gracefully Starting And Stopping Programs
 * We have a bool stop indicating the current status. Since this will be changed by multiple goroutines, we will have an associate sync.Mutex lock.
 * We use signal.Notify to ask Go to send the signal down signalChan when someone tries to halt the program.
 * <-signalChan ==> by doing this, we are blocking waiting for the signal by trying to read from signalChan.
+
+
+Finally Calling All Goroutines in Main Method
+* We block twitterStoppedChan by attempting to read from it.
+
