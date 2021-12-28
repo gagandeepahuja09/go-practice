@@ -132,3 +132,22 @@ Reading from Twitter:
     * We make a new decoder using response body.
     * We keep reading inside an infinite for loop by calling the Decode method.
     * If the tweet has mentioned some options, then send it to the votes channel.
+
+* Starting Twitter Stream
+* Terminating the program whenever Decode returns an error doesn't provide a very robust solution. Doc states that API will drop the connection from time to time.
+* Also we are going to terminate the connection periodically, so we need to think about a way of reconnecting once the connection is dropped.
+* Continually calling the readFromTwitter after some delays, eg. 10 second delays will help.
+* In order to acheive this we'll have an infinite for loop in our goroutine and after calling the function readFromTwitter, we'll have a 10s delay.
+* Signal Channels: To signal events b/w codes running in different goroutines.
+* startTwitterStream will start a goroutine that continually calls readFromTwitter until we signal that we want it to stop.
+* Once it has stopped, we want to be notified through another signal channel.
+* The return of the function will be a struct{}: a signal channel.
+* struct{}{}(0 bytes) is a more memory efficient way of signaling events than bool(1 byte)
+* fmt.Println(reflect.TypeOf(true).Size())
+* fmt.Println(reflect.TypeOf(struct{}{}).Size())
+* We are going to use 2 signal channels here. One is for deciding whether it should stop and another to signal the stop so that can be consumed by other goroutines.
+* We'll return a read-only channel so that other goroutines can only read from it.
+* Outside the goroutine, other goroutines will use stopchan to tell our goroutine to stop. It is receive only inside this function. At other places it will be capable of sending.
+* Returning a channel in this function is necessary because our function triggers it's own goroutine and immediately returns, so without returning this calling code would have no idea whether the spawned code was still running or not.
+* Time.sleep is to give the twitter API some rest in case it closed the connection due to overuse. Once we've rested, we re-enter the loop and check if calling code wants us to stop or not.
+* NOTE: Signal channels are a great way to start and stop something when all code lives in a single package. If we need to cross API boundaries, context package is the recommended way to deal with deadlines, cancellation and stopping.
