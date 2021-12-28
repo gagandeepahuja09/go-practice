@@ -2,6 +2,10 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
 	"github.com/nsqio/go-nsq"
 	"gopkg.in/mgo.v2"
@@ -52,5 +56,22 @@ func publishVotes(votes <-chan string) <-chan struct{} {
 }
 
 func main() {
-
+	if err := dialdb(); err != nil {
+		log.Fatalln("failed to dial mongoDB:", err)
+	}
+	defer closedb()
+	var stoplock sync.Mutex
+	stop := false
+	stopChan := make(chan struct{}, 1)
+	signalChan := make(chan os.Signal, 1)
+	go func() {
+		<-signalChan
+		stoplock.Lock()
+		stop = true
+		stoplock.Unlock()
+		log.Println("Stopping...")
+		stopChan <- struct{}{}
+		closeConn()
+	}()
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
 }

@@ -162,3 +162,9 @@ The votes channel is received by the publishVotes method, in order to publish th
 * Once the votes channel is closed, we will stop publishing and send a signal down the returned stop signal channel. 
 * When it comes to sending the empty channel, we could have used defer as well.
 
+Gracefully Starting And Stopping Programs
+* When our program is terminated, we want to do a few things before exiting, namely closing our connection to Twitter and stopping the NSQ publisher.
+* To achieve this, we have to override the default Ctrl+C behaviour.
+* We have a bool stop indicating the current status. Since this will be changed by multiple goroutines, we will have an associate sync.Mutex lock.
+* We use signal.Notify to ask Go to send the signal down signalChan when someone tries to halt the program.
+* <-signalChan ==> by doing this, we are blocking waiting for the signal by trying to read from signalChan.
