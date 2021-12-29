@@ -15,3 +15,6 @@ Waitgroups
 * Waitgroup.Done()   ==> To signal that a goroutine is done with its task.
 * Waitgroup.Wait()   ==> To wait until all goroutines are done.
 * Pass Waitgroup instance to the goroutines so that they can call the done method.
+
+Parallelism
+* In the parallelism example we created a goroutine which was parallely running throughout and didn't have a waitgroup.
