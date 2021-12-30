@@ -23,3 +23,6 @@ Step
 * We can pass the data to the channel through main goroutine or any other goroutine.
 * The goroutines listening to the data can accept the data and process them.
 * The advantage of using channels is that multiple goroutines can wait on the same channel and execute tasks concurrently.
+
+Solving Cashier Problem With Channels
+* In the solution we saw that each order(denoted by order num) was picked in a mutually exclusive way by one of the goroutines and we didn't need to use any mutex locks for it. Was implemented simply by reading from a channel.
