@@ -19,3 +19,12 @@ Closing Channels
 * We can also range over a channel. When a channel closes, the range loop ends.
 * Closing a closed channel, nil channel or receive only channel will cause panic. Only a bidirectional channel or send-only channel can be closed.
 * Closing a channel is not mandatory and not relevant for the garbage collector(GC). If a GC determines that a channel is unreachable irrespective of whether it is open/closed it will be garbage collected.
+
+
+Multiplexing Channels
+* When we use a single resource to act on multiple resources or actions.
+* A situation where we want to execute multiple types of tasks. However, they can only be executed in a mutually exclusive way or they need to work on a shared resource.
+* Let's try to implement multiplexing in a naive way and see what problems we face.
+* In naive multiplexing, change from i := 0 to i := 1 and we will start getting a deadlock error. ==> fatal error: all goroutines are asleep.
+* This is because we keep on waiting for something to be sent on channel 0 but it is never sent. All other channels have to keep on waiting on channel 0 but since nothing is sent, it results in a deadlock.
+* Multiplexing helps us keep on waiting on multiple channels without blocking other channels while acting on a message once it is available on a channel.
