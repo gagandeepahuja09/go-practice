@@ -9,5 +9,5 @@
 * Librarian: Responsible for handling user interaction.
 
 * These 2 will run as separate servers.
-* We will 3 instances of librarian.
+* We will have 3 instances of librarian.
 * docker run works well for single images but for a network it might get complicated. So we'll use docker-compose.yaml
