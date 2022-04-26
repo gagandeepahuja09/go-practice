@@ -21,3 +21,4 @@ Circuit Breaker
 * The circuit breaker is just a specialized Adapter pattern.
 * Breaker wraps circuit to add some additional error handling logic.
 * Breaker takes circuit as input parameter and returns a circuit.
+* We'll later review why exponential backoff isn't the ideal algorithm.
