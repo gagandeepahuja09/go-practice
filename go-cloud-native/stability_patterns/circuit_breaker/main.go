@@ -30,6 +30,9 @@ func Breaker(circuit Circuit, failureThreshold int) Circuit {
 
 		response, err := circuit(ctx)
 
+		m.Lock()
+		defer m.Unlock()
+
 		lastAttempt = time.Now()
 
 		if err != nil {
