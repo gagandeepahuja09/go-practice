@@ -59,3 +59,19 @@ Debounce: A closure with the same function signature as circuit.
     * Uses time.Ticker to determine if enough time has passed since function was last calle.d
     * Creating a time.Ticker for every call could be expensive if the number of calls are large. We use sync.Once to ensure that it is created only once.
     * If there are N consecutive call made with time gap < d, then only after the Nth call would the circuit be called.
+
+**************************************************************************************
+
+Retry
+* Retry accounts for possible transient fault in a distributed system by transparently retrying a failed operation.
+
+**Applicability**
+* Transient errors are a fact of life when working with complex distributed systems.
+* Could be due to:
+    * Protective strategies like throttling that temporarily rejects requests under high workload.
+    * Adaptive strategies like autoscaling that can add capacity when needed.
+* Failing to account for transient failures can lead to a system that's unnecessarily brittle.
+
+**Implementation**
+* Works similarly to Circuit Breaker or Debounce ==> closures + passes and returns the same type.
+* Not included here, but retry logic will include some sort of a backoff algorithm.

@@ -21,6 +21,7 @@ Fast Builds
 * Possible cons => some promising Go features getting skipped due to affecting the build times.
 
 Linguistic Stability
+* Programs written in Go 1 will containue to compile and run correctly, unchanged, for the lifetime of Go 1 specification.
 
 Memory Safety
 * Go neither needs nor allows the kind of manual memory management and manipulation that lower-level languages like C, C++ allow and require.
