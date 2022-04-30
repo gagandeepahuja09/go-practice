@@ -52,6 +52,9 @@ Debounce: A closure with the same function signature as circuit.
     * Any subsequent  call made before the time interval expires is ignored.
     * We ensure thread safety by using mutex locks. Any overlapping calls will wait for the cached result to be available.
     * Each call will reset the threshold timeout so that call is made exactly once for a series of call.
+    * DebounceFirst returns cached result while Breaker returns an error.
 
 * Function-last: 
-    * More common in FE services like JS.
+    * More common in FE services like autocomplete.
+    * Uses time.Ticker to determine if enough time has passed since function was last calle.d
+    * Creating a time.Ticker for every call could be expensive if the number of calls are large. We use sync.Once to ensure that it is created only once.
