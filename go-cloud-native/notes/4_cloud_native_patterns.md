@@ -58,3 +58,4 @@ Debounce: A closure with the same function signature as circuit.
     * More common in FE services like autocomplete.
     * Uses time.Ticker to determine if enough time has passed since function was last calle.d
     * Creating a time.Ticker for every call could be expensive if the number of calls are large. We use sync.Once to ensure that it is created only once.
+    * If there are N consecutive call made with time gap < d, then only after the Nth call would the circuit be called.
