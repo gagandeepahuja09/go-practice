@@ -3,7 +3,7 @@ Stability Patterns
 
 **************************************************************************************
 
-Circuit Breaker
+**Circuit Breaker**
 * Degrades service functions in response to a likely fault.
 * Temporarily ceases to execute requests.
 * Prevents larger/cascading failures by eliminating recurring errors and providing reasonable error responses.
@@ -27,7 +27,7 @@ Circuit Breaker
 
 **************************************************************************************
 
-Debounce
+**Debounce**
 * Limits the frequency of a function invocation so that only the first or last in a cluster of calls is actually performed.
 
 **Applicability**
@@ -62,7 +62,7 @@ Debounce: A closure with the same function signature as circuit.
 
 **************************************************************************************
 
-Retry
+**Retry**
 * Retry accounts for possible transient fault in a distributed system by transparently retrying a failed operation.
 
 **Applicability**
@@ -78,7 +78,7 @@ Retry
 
 **************************************************************************************
 
-Throttle
+**Throttle**
 * Throttle limits the frequency of a function call to some max. no. of invocations per unit of time. Examples:
     * User allowed only 10 service requests per second.
     * A client may restrict itself to call a particular function once every 500 ms.
@@ -88,7 +88,7 @@ Throttle
     * Debounce focuses on cluster of activity and ensures it's called exactly once.
     * Throttle operates strictly on unit of time.
 
-Implementation
+**Implementation**
 * Token bucket is the most common implementation.
 * When a function is called, a token is taken from the bucket, which then refills at a fixed rate.
 * Ways of treating in case of insufficient token in the bucket:
@@ -97,4 +97,29 @@ Implementation
     * Enqueue the request when sufficient tokens are available: This is more complex and requires extra care to be taken to ensure that the memory isn't exhausted.
 * The bucket is initially allocated maxTokens tokens and it's the max the bucket can handle.
 * At every d duration, refillCount tokens are added.
-* With every to
+* With every request, the tokenCount decreases.
+
+**************************************************************************************
+
+**Timeout**
+* 1st fallacy of Distribute system ==> network is unreliable.
+* Timeout allows a process to stop waiting for an answer when it's clear that an answer may not be coming.
+* Proper use of timeouts provides fault isolation, prevents cascading failures and reduces the chance that a problem in the downstream service becomes your problem.
+
+**Participants**
+* Client, SlowFunction, Timeout(wrapper).
+
+**Implementation**
+* Idiomatic way in Go is to use the context package.
+* Ideally any long running function should accept a context as the first argument.
+    ctx := context.Background()
+    ctxt, cancel := context.WithTimeout(ctx, 10 * time.Second)
+    defer cancel()
+
+    result, err := SomeFunction(ctxt)
+
+* That can't always be done as there could be 3rd party packages that don't accept a context value.
+* If we were to call it directly, we'll have to wait till it gives us a result.
+* Instead we can call it in a goroutine. If we get the result in an acceptable time period, we use it, else we move on it it doesn't.
+* We'll use context.Context for timeouts, channels for communicating results, and select to catch whichever acts first.
+* Our Timeout method will take a SlowFunction(which doesn't contain context) and returns a function in which a context can be supplied for timeout. 
