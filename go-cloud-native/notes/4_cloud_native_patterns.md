@@ -75,3 +75,26 @@ Retry
 **Implementation**
 * Works similarly to Circuit Breaker or Debounce ==> closures + passes and returns the same type.
 * Not included here, but retry logic will include some sort of a backoff algorithm.
+
+**************************************************************************************
+
+Throttle
+* Throttle limits the frequency of a function call to some max. no. of invocations per unit of time. Examples:
+    * User allowed only 10 service requests per second.
+    * A client may restrict itself to call a particular function once every 500 ms.
+    * An account may be allowed only 3 failed attempts in a 24h period.
+    * Most common reason is to account for sharp activity spikes that could saturate the system with expensive requests, or lead to service degradation and eventually failure.
+* Difference b/w Throttle and Debounce
+    * Debounce focuses on cluster of activity and ensures it's called exactly once.
+    * Throttle operates strictly on unit of time.
+
+Implementation
+* Token bucket is the most common implementation.
+* When a function is called, a token is taken from the bucket, which then refills at a fixed rate.
+* Ways of treating in case of insufficient token in the bucket:
+    * Return an Error(most common). eg. 429 status code(RESTful)
+    * Replay the response of the last successful function call: Can be useful if it's expected to give the same result when called too soon. More common in JS world.
+    * Enqueue the request when sufficient tokens are available: This is more complex and requires extra care to be taken to ensure that the memory isn't exhausted.
+* The bucket is initially allocated maxTokens tokens and it's the max the bucket can handle.
+* At every d duration, refillCount tokens are added.
+* With every to
