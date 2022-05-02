@@ -36,3 +36,22 @@ Generation 1: The Monolith
 * Handler => any type that implements the Handler interface.
 * mux/multiplexer => direct incoming signals to one of the possible outputs.
 * When a request is received by a service that's been started by ListenAndServe, it's the job of a mux to compare the request URL to the registered patterns and call the handler function with the one that matches closely.
+* If mux is specified as nil, the DefaultServeMux is used.
+
+gorilla/mux
+* For many of the use-cases, DefaultServeMux should be fine.
+* One of the key features of gorilla/mux is the ability to create paths with variable segments which can optionally contain a regular expression pattern.
+* Format => {name} or {name:pattern}
+    r := mux.NewRouter()
+    r.HandleFunc("/products/{key}", ProductHandler)
+    r.HandleFunc("/articles/{category}/", ArticlesCategoryHandler)
+    r.HandleFunc("/articles/{category}/{id:[0-9]+}, ArticleHandler)
+* We can retrieve the variables using mux.Vars function which returns a map[string]string.
+* Matchers => We can add additional matching criterias. Eg domains/subdomains, methods, schemes, path prefixes, headers or even custom matching functions that we create. 
+    * Each matcher returns a route, hence can be easily chained.
+    * r.HandleFunc("/products", ProductHandler).
+        Host("www.example.com").
+        Methods("GET", "PUT").
+        Schemes("http")
+
+Building a RESTful service
