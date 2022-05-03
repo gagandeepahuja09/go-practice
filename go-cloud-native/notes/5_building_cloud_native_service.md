@@ -79,3 +79,26 @@ Resource State:
 
 * Application state can be more problematic because it requires *server-affinity*. Which means sending each of a user's request to the same server(stickiness). This can make it hard to destroy/replace server replicas.
 
+**What's A Transaction Log?**
+* Assuming that it'll be read only when the service is restarted or otherwise needs to recover its state.
+* It'll be read from top to bottom, sequentially replaying each event.
+* For speed & simplicity ==> append only.
+* Attributes:
+    * Sequence Number
+    * Event Type(PUT/DELETE)
+    * Key
+    * Value
+* Create a txn logger interface with 2 methods for now: WritePut, WriteDelete.
+
+**Storing State In A Transaction Log File**
+Pros:
+    * No downstream dependency on any external service.
+    * Technically straightforward.
+Cons:
+    * Harder to scale: Will need additional logic to distribute our state between nodes when we want to scale.
+    * Uncontrolled Growth: We'll need to find a way to compact them(something like LSM trees).
+
+Prototyping: 
+* We'll write in plain-text. A binary, compressed format might be more time and space efficient, but we can always optimize later.
+* Each entry will be written in its own line. (easier to read).
+* Each line will include the 4 fields delimited by tabs.
