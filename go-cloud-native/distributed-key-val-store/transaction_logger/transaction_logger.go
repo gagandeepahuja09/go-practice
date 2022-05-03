@@ -1,6 +1,7 @@
 package transaction_logger
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
@@ -50,6 +51,41 @@ func (l *FileTransactionLogger) WriteDelete(key string) {
 
 func (l *FileTransactionLogger) Err() <-chan error {
 	return l.errors
+}
+
+func (l *FileTransactionLogger) ReadEvents() (<-chan Event, <-chan error) {
+	scanner := bufio.NewScanner(l.file)
+	outEvent := make(chan Event)
+	outError := make(chan error)
+	go func() {
+		defer close(outEvent)
+		defer close(outError)
+
+		var e Event
+
+		for scanner.Scan() {
+			line := scanner.Text()
+			if _, err := fmt.Sscanf(line,
+				"%d\t%d\t%s\t%s",
+				&e.Sequence, &e.EventType, &e.Key, &e.Value); err != nil {
+				outError <- fmt.Errorf("input parse error: %w", err)
+				return
+			}
+
+			if l.lastSequence >= e.Sequence {
+				outError <- fmt.Errorf("transaction numbers out of sequence")
+			}
+
+			l.lastSequence = e.Sequence
+			outEvent <- e
+		}
+
+		if err := scanner.Err(); err != nil {
+			outError <- fmt.Errorf("transaction log read failure: %w", err)
+			return
+		}
+	}()
+	return outEvent, outError
 }
 
 func (l *FileTransactionLogger) Run() {

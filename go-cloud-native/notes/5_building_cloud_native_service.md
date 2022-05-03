@@ -150,3 +150,12 @@ const (
 * This lets the consuming event handle short bursts of events without being slowed by disk I/O.
 * If the buffer does fill up, then the write methods will block until the log writing goroutine catches up.
 * The errors channel is also buffered with size of 1 to ensure that we are able to send the error in a non-blocking manner. We halt the goroutine when we get an error as it has a size of only 1.
+
+**Using a bufio.Scanner to play back file transaction logs**
+* We'll use fmt.Sscanf to read through it and extract the four necessary attributes.
+* Go's concurrency primitives makes it trivially easy to stream the data to the consumer in a much more space and memory-efficient way.
+* The ReadEvents method can be said to be two functions in one:
+    * Outer function initializes the bufio.Scanner and returns the event and error channels.
+    * The inner function run concurrently to ingest the file contents line-by-line and send the results to the channels.
+* file attribute in transaction logger is of *os.File which has a read method.
+* We reuse the same Event value in each iteration rather than creating a new one. This is because outEvent channel is sending struct values and not pointer to struct. 
