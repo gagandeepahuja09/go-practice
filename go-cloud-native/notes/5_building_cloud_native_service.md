@@ -30,7 +30,7 @@ Generation 0: The Core Functionality
 
 ***********************************************************************************
 
-Generation 1: The Monolith
+**Generation 1: The Monolith**
 * REST => Perfectly sufficient for our needs.
 * Go standard libraries are designed to be extensible, so there are a no. of web frameworks that extend them. 
 * Handler => any type that implements the Handler interface.
@@ -55,3 +55,27 @@ gorilla/mux
         Schemes("http")
 
 Building a RESTful service
+* Built the GET, PUT methods, both of which are idempotent.
+
+**Making Our Data Structure Concurrency Safe**
+* Maps in Go are not atomic and not safe for concurrent use.
+* Using magic of composition, we'll create an *anonymous struct* that contains our map and an embedded sync.RWMutex.
+
+***********************************************************************************
+
+**Generation 2: Persisting Resource State**
+* One of the stickiest challenges with distribute cloud native applications is how to handle state. 
+* 2 Common ways to maintain the state of the application:
+    * Transaction Log File: Makes sense when we want to store our data in memory most of the time, only accessing persistence mechanism during startup time.
+    * External Database: Will help with scaling across multiple replicas and provide resilience. 
+
+**Application State v/s Resource State**
+Application State:
+    * Server-side data about the application or how it's being used by a client.
+    * Eg. client session tracking, eg to associate them with their access credentials or some other application context.
+Resource State:
+    * The current state of a resource within a service at any point in time.
+    * It's the same for every client and has nothing to do with the interaction b/w client and server.
+
+* Application state can be more problematic because it requires *server-affinity*. Which means sending each of a user's request to the same server(stickiness). This can make it hard to destroy/replace server replicas.
+
