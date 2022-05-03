@@ -21,7 +21,7 @@ Why do we need idempotence?
 
 Generation 0: The Core Functionality
 * While returning the error, we don't use errors.New. Instead we return the prebuilt ErrNoSuchKey error value.
-* This is an example of sentinel error, which determines exactly what type of error it's receiving and to respond accordingly.
+* This is an example of *sentinel error*, which determines exactly what type of error it's receiving and to respond accordingly.
 
     if err.Is(ErrNoSuchKey) {
         http.Error(w, err.Error(), http.StatusNotFound)
@@ -135,3 +135,18 @@ const (
 * Keeping an io.Writer that the WritePut and WriteDelete methods will operate on directly would be a single-threaded approach. We might be spending a lot of time in I/O.
 * We'll instead write events to a channel which will be processed by a goroutine running in parallel.
 * While the above approach makes for more efficient writes, it means that WritePut, WriteDelete can't return an error. We'll use a dedicated errors channel to deal with that instead.
+
+**Creating A new FileTransactionLogger**
+* NewFileTransactionLogger will call the os.OpenFile function to open the file specified by the filename parameter.
+* Several flags ORed to set its behavior:
+    * os.O_RDWR: Opens the file in read/write mode.
+    * os.O_APPEND: Any writes to the file will be append, not overwrite.
+    * os.O_CREATE: If the file doesn't exist, create it.
+* We could spawn our goroutine for listening to the events channel in this NewFileTransactionLogger method but that would make it look more mysterious.
+* Instead we should have a separate Run method.
+
+**Appending entries to the transaction log file**
+* Using a buffered channel ensures that the call to WriteDelete and WritePut won't fail as long as the buffer isn't full.
+* This lets the consuming event handle short bursts of events without being slowed by disk I/O.
+* If the buffer does fill up, then the write methods will block until the log writing goroutine catches up.
+* The errors channel is also buffered with size of 1 to ensure that we are able to send the error in a non-blocking manner. We halt the goroutine when we get an error as it has a size of only 1.
