@@ -102,3 +102,36 @@ Prototyping:
 * We'll write in plain-text. A binary, compressed format might be more time and space efficient, but we can always optimize later.
 * Each entry will be written in its own line. (easier to read).
 * Each line will include the 4 fields delimited by tabs.
+
+Defining Event Type
+* We want the WritePut and WriteDelete methods to operate asynchronously.
+
+Declaring Constants With Iota
+
+* It's value starts with zero in each constant declaration and increments with each constant assignment, whether or not the iota identifier is actually referenced.
+
+const (
+    a = 42 * iota   // iota = 0, a = 0
+    b = 1 << iota   // iota = 1, b = 1
+    c = 3           // iota = 2, c = 3  (iota increments anyway!)
+    d float64 = iota / 2 // ioat = 3, d = 1.5 
+)
+
+* The iota keyword allows *implicit repetition*, which makes trivial to create arbitrarily long sets of related constants as show in below bytes example.
+
+type ByteSize uint64
+
+const (
+    _ = iota
+    KB ByteSize = 1 << (10 * iota) // KB = 2 ^ 10
+    MB // 2 ^ (10 * 2)
+    GB // 2 ^ (10 * 3)
+    TB
+    PB
+)
+
+**Implementing Your FileTransactionLogger**
+* In order to keep a track of the physical location of the transaction log, we'll have an os.File attribute.
+* Keeping an io.Writer that the WritePut and WriteDelete methods will operate on directly would be a single-threaded approach. We might be spending a lot of time in I/O.
+* We'll instead write events to a channel which will be processed by a goroutine running in parallel.
+* While the above approach makes for more efficient writes, it means that WritePut, WriteDelete can't return an error. We'll use a dedicated errors channel to deal with that instead.
