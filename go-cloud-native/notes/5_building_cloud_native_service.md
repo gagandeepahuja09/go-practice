@@ -159,3 +159,51 @@ const (
     * The inner function run concurrently to ingest the file contents line-by-line and send the results to the channels.
 * file attribute in transaction logger is of *os.File which has a read method.
 * We reuse the same Event value in each iteration rather than creating a new one. This is because outEvent channel is sending struct values and not pointer to struct. 
+
+**Updating the transaction logger interface**
+
+**Initializing the FileTransactionLogger in our web service**
+* foo, ok = <-ch; ok will be false if the channel is closed.
+* Alternatively we can range through the channel. The channel closes when the range ends.
+
+**Integrating the FileTransactionLogger in our web service**
+
+**Future Improvements**
+* No tests.
+* No close method to gracefully close the file.
+* The service can close with events still in write buffer; events can get lost.
+* Keys and values aren't encoded in the transaction log: multiple line or white space will fail to parse correctly.
+* Unbound size of keys and values.
+* Writing in plain-text will take up more space.
+
+***********************************************************************************
+
+**Storing State In An External Database**
+* Part of standard go library: https://pkg.go.dev/database/sql
+
+Pros:
+* Externalizes application state
+    Less need to worry about distribute state and closer to "cloud native".
+* Easier to scale
+    Not having to share data between replicas makes scaling out easier(not easy).
+Cons:
+* Introduces an upstream dependency
+    Creates a dependency on another resource that might fail.
+* Increases complexity
+    Yet another thing to manage and configure.                        
+
+**Working with databases in Go**
+* databases/sql package provided by Go.
+* (sql.DB) => most common member of the package.
+    * Go's primary DB abstraction.
+    * Entry point for creating statements and transactions, executing queries, fetching results.
+    * Negotiates connection with the DB and maintains a connection pool.
+
+**Importing A database driver**
+* sql.DB => common interface for interacting with a SQL DB.
+* Database driver => implements the specifics of a DB type.
+* The lib/pq postgres driver package will be imported anonymously.
+
+**Defining PostgresTransactionLogger struct**
+
+**Creating a new PostgresTransactionLogger**
