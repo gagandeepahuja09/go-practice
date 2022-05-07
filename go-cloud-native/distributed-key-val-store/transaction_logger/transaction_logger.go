@@ -1,4 +1,4 @@
-package transaction_logger
+package main
 
 import (
 	"bufio"
@@ -24,6 +24,11 @@ type Event struct {
 type TransactionLogger interface {
 	WritePut(key, value string)
 	WriteDelete(key string)
+	Err() <-chan error
+
+	ReadEvents() (<-chan Event, <-chan error)
+
+	Run()
 }
 
 type FileTransactionLogger struct {
@@ -53,6 +58,9 @@ func (l *FileTransactionLogger) Err() <-chan error {
 	return l.errors
 }
 
+// Reads the events from the transaction log file and writes the events and errors
+// to the respective channels. This is done in a goroutine, hence the channel
+// can be read in parallel.
 func (l *FileTransactionLogger) ReadEvents() (<-chan Event, <-chan error) {
 	scanner := bufio.NewScanner(l.file)
 	outEvent := make(chan Event)
@@ -88,6 +96,10 @@ func (l *FileTransactionLogger) ReadEvents() (<-chan Event, <-chan error) {
 	return outEvent, outError
 }
 
+// Run will run a goroutine in parallel which will read from events channel
+// for the events coming from WritePut and WriteDelete and will write a new line
+// to the file for each event. It will also write to the errors channel for any
+// errors received.
 func (l *FileTransactionLogger) Run() {
 	events := make(chan Event, 16)
 	l.events = events
