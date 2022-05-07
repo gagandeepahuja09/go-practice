@@ -207,3 +207,5 @@ Cons:
 **Defining PostgresTransactionLogger struct**
 
 **Creating a new PostgresTransactionLogger**
+
+**Using db.Exec to execute a SQL Insert**
