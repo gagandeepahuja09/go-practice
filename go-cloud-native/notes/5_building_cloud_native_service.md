@@ -209,3 +209,5 @@ Cons:
 **Creating a new PostgresTransactionLogger**
 
 **Using db.Exec to execute a SQL Insert**
+
+**Using db.Query to play back transaction logs**
