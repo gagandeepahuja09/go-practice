@@ -32,31 +32,10 @@ func (l *PostgresTransactionLogger) Err() <-chan error {
 	return l.errors
 }
 
-func (l *PostgresTransactionLogger) verifyTableExists() (bool, error) {
-	query := "SELECT sequence FROM transactions LIMIT 1"
-	rows, err := l.db.Query(query)
-	if err != nil {
-		return false, fmt.Errorf("sql query error: %w", err)
-	}
-	for rows.Next() {
-		err := rows.Scan()
-		if err != nil {
-			return false, fmt.Errorf("error reading row: %w", err)
-		} else {
-			return true, nil
-		}
-	}
-	err = rows.Err()
-	if err != nil {
-		return false, fmt.Errorf("transaction log read failure: %w", err)
-	}
-	return true, nil
-}
-
 func (l *PostgresTransactionLogger) createTable() error {
-	query := `CREATE TABLE transactions (
-		sequence int NOT NULL AUTO_INCREMENT,
-		event_type tinyint NOT NULL,
+	query := `CREATE TABLE IF NOT EXISTS transactions (
+		sequence SERIAL PRIMARY KEY,
+		event_type SMALLINT NOT NULL,
 		key VARCHAR(255) NOT NULL,
 		value VARCHAR(255) DEFAULT NULL
 	)`
@@ -84,15 +63,8 @@ func NewPostgresTransactionLogger(config PostgresDBParams) (TransactionLogger, e
 	}
 
 	logger := &PostgresTransactionLogger{db: db}
-
-	exists, err := logger.verifyTableExists()
-	if err != nil {
-		return nil, fmt.Errorf("failed to verify table exists: %w", err)
-	}
-	if !exists {
-		if err = logger.createTable(); err != nil {
-			return nil, fmt.Errorf("failed to create table: %w", err)
-		}
+	if err = logger.createTable(); err != nil {
+		return nil, fmt.Errorf("failed to create table: %w", err)
 	}
 
 	return logger, nil
