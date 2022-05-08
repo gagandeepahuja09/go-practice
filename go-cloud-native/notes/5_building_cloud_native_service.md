@@ -223,3 +223,10 @@ Cons:
     postgres
 * docker run --name postgresql -e POSTGRES_USER=test -e POSTGRES_PASSWORD=test123 -p 5432:5432 -d postgres ==>
 * https://stackoverflow.com/questions/26598738/how-to-create-user-database-in-script-for-docker-postgres
+
+Future Improvements
+* We assume that the database exists and we'll get errors if they don't.
+    Solved by docker-compose
+* No Close method to clean up open connections.
+* The service can close with events still in write buffer: events can get lost.
+* The log retains records of deleted values forever + no sort of merging for the same key: it will grow indefinitely.
