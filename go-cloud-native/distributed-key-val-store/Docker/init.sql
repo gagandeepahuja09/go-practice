@@ -1,0 +1,4 @@
+CREATE USER docker;
+
+CREATE DATABASE docker;
+GRANT ALL PRIVILEGERS ON DATABASE docker to docker;

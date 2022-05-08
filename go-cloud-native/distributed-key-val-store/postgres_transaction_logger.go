@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/lib/pq"
 )
 
 type PostgresTransactionLogger struct {
@@ -30,9 +32,44 @@ func (l *PostgresTransactionLogger) Err() <-chan error {
 	return l.errors
 }
 
+func (l *PostgresTransactionLogger) verifyTableExists() (bool, error) {
+	query := "SELECT sequence FROM transactions LIMIT 1"
+	rows, err := l.db.Query(query)
+	if err != nil {
+		return false, fmt.Errorf("sql query error: %w", err)
+	}
+	for rows.Next() {
+		err := rows.Scan()
+		if err != nil {
+			return false, fmt.Errorf("error reading row: %w", err)
+		} else {
+			return true, nil
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		return false, fmt.Errorf("transaction log read failure: %w", err)
+	}
+	return true, nil
+}
+
+func (l *PostgresTransactionLogger) createTable() error {
+	query := `CREATE TABLE transactions (
+		sequence int NOT NULL AUTO_INCREMENT,
+		event_type tinyint NOT NULL,
+		key VARCHAR(255) NOT NULL,
+		value VARCHAR(255) DEFAULT NULL
+	)`
+	_, err := l.db.Exec(query)
+	if err != nil {
+		return fmt.Errorf("failed to create table: %w", err)
+	}
+	return nil
+}
+
 func NewPostgresTransactionLogger(config PostgresDBParams) (TransactionLogger, error) {
-	connStr := fmt.Sprintf("host=%s dbname=%s user=%s password=%s",
-		config.host, config.dbName, config.user, config.password)
+	connStr := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
+		config.user, config.password, config.host, "5432", config.dbName)
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {

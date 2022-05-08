@@ -211,3 +211,15 @@ Cons:
 **Using db.Exec to execute a SQL Insert**
 
 **Using db.Query to play back transaction logs**
+
+**Implementing verifyTableExists and createTable**
+
+* unknown driver "postgres" (forgotten import?)
+    Import anonymously
+* dial tcp [::1]:5432: connect: connection refused
+    docker run -d \
+        --name kvs \
+        -e POSTGRES_PASSWORD=test123 \
+    postgres
+* docker run --name postgresql -e POSTGRES_USER=test -e POSTGRES_PASSWORD=test123 -p 5432:5432 -d postgres ==>
+* https://stackoverflow.com/questions/26598738/how-to-create-user-database-in-script-for-docker-postgres

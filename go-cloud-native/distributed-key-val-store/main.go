@@ -18,7 +18,12 @@ var logger TransactionLogger
 // file.
 func initializeTransactionLog() error {
 	var err error
-	logger, err = NewFileTransactionLogger("transaction.log")
+	logger, err = NewPostgresTransactionLogger(PostgresDBParams{
+		host:     "0.0.0.0",
+		dbName:   "docker",
+		user:     "docker",
+		password: "test123",
+	})
 	if err != nil {
 		return fmt.Errorf("failed to create event logger: %w", err)
 	}
@@ -86,7 +91,10 @@ func keyValueGetHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	initializeTransactionLog()
+	err := initializeTransactionLog()
+	if err != nil {
+		log.Fatalf("failed to initialize transaction log: %v", err)
+	}
 
 	r := mux.NewRouter()
 	r.HandleFunc("/v1/{key}", keyValuePutHandler).Methods("PUT")
