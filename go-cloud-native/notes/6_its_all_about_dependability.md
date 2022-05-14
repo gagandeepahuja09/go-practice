@@ -35,3 +35,34 @@ Fault Removal: Fault removal techniques to reduce the number and severity of fau
 Fault Forecasting: Identify the presence, creation, and consequence of faults.
 
 * These 4 means correspond very well to the 5 cloud native attributes.
+
+********************************************************************************************************
+
+**Fault Prevention**
+* Many - if not most - classes of errors and faults can be predicted and prevented during the earliest phases of development.
+
+**Good programming practices**
+* Explicit goal of any development methodology is fault prevention - from pair programming, to TDD, to CR practices.
+
+**Language Features**
+* Features such as dynamic typing, pointer arithmetic, manual memory management, and thrown exceptions can easily introduce unintended behaviors that are difficult to find and fix, and may even be maliciously exploitable.
+
+**Scalability**
+* Ability of a system to continue to provide correct service in the face of significant change in demand.
+* We'll discuss horizontal and vertical scaling in detail later.
+* We'll discuss the problem with application state later.
+* While scaling resources is eventually often inevitable, it's often better and cheaper to resist the temptation to throw hardware at the problem and postpone scaling events as long as possible by considering runtime efficiency and algorithmic scaling.
+* There are various Go features and tools that allow us to identify and fix common problems like memory leaks and lock contention that tend to plague systems at scale.
+
+**Loose Coupling**
+* The system property and design strategy of ensuring that a system's components have as little knowledge of other components as possible.
+* Distributed monolith: Worst of both worlds. All of the complexities of microservices  + all the tangled dependencies of the typical monolith.
+
+********************************************************************************************************
+
+**Fault Tolerance**
+* Synonymous for - self healing, self repair, resilience.
+* A system's ability to detect errors and prevent them from cascading to a full blown failure.
+* 2 Parts: *Error Detection*, *Recovery*.
+* Recovery: System is returned to a state where it can be activated again.
+* The most common strategy for providing resilience is redundancy: the duplication of critical components(having multiple service replicas) or functions(retrying service requests).
