@@ -66,3 +66,52 @@ Fault Forecasting: Identify the presence, creation, and consequence of faults.
 * 2 Parts: *Error Detection*, *Recovery*.
 * Recovery: System is returned to a state where it can be activated again.
 * The most common strategy for providing resilience is redundancy: the duplication of critical components(having multiple service replicas) or functions(retrying service requests).
+
+********************************************************************************************************
+
+**Fault Removal**
+
+**Verification and Testing**
+* Two common approaches of finding software faults in development:
+    * Static Analysis: 
+        * Automated, rule-based code analysis performed without actually executing programs.
+        * Useful for providing early feedback, enforcing consistent practices, and finding common errors and security holes without depending on human knowledge or effort.
+    * Dynamic Analysis/Testing.
+* Having software that's designed for testability by minimizing the degrees of freedom - the range of possible states - of its components.
+
+**Manageability**
+* A system is said to be manageable if it's possible to sufficiently alter its behavior without having to alter its code.
+* Manageability can include the following:
+    * Configuration changes.
+    * Feature flags.
+    * Rotate credentials or TLS certificates.
+    * Deploy or upgrade/downgrade system components.
+* Manageable systems are designed for adaptability, to accomodate changing functional, environmental or security requirements.
+* Unmanageable systems are brittle, frequently requiring adhoc or manual changes.
+
+********************************************************************************************************
+
+**Fault Forecasting**
+* Observability, stress testing, failure mode and effects analysis
+
+********************************************************************************************************
+
+**The Continuing Relevance Of the 12 Factor App**
+* Developers at Heroku were seeing applications being developed again and again with the same fundamental flaws.
+* Methodology was for building applications that: 
+    1. Use declarative format for setup automation, to minimize time and cost for new developers joining the project.
+    2. Have a clean contract with the underlying OS, offering maximum portability between execution environments.
+    3. Are suitable for deployment on modern cloud platforms, obviating the need for servers and systems administration.
+    4. Minimize divergence between development and production, enabling continuous development for maximum agility.
+    5. Can scale up without significant changes to tooling, architecture, or development practices. 
+
+********************************************************************************************************
+
+**I. Codebase**
+* One codebase tracked in revision control, many deploys.
+* For any given service, there should be exactly 1 codebase that's used to produce any no. of immutable releases for multiple deployments to multiple environments.
+
+* Having multiple services sharing the same code tends to lead to a blurring of the lines, trending in time to something like a monolith, making it harder to make changes in one part of the service without affecting other part or other service.
+* Shared code should be refactored into libraries that can be individually versioned and included through a dependency manager.
+
+* Having a single service spread across multiple repos makes it nearly impossible to automatically apply the build and deploy phases of your service's life cycle.
