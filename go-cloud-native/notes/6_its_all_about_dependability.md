@@ -155,3 +155,21 @@ Fault Forecasting: Identify the presence, creation, and consequence of faults.
         * Reading from command-line flags, variously formatted configuration files, and even remote configuration systems like etcd, Consul.
 
 ********************************************************************************************************
+
+**IV. Backing Services**
+* *Treat backing services as attached resources*
+* Backing service: Any downstream dependency that a service consumes.
+* A services should make no distinction b/w backing services of the same type - internal or 3rd party.
+* Eg. A MySQL DB run by your own team's sysadmins should be treated no differently than an AWS-managed RDS instance.
+* Whether it's running in a data center on another hemisphere or a docker container on the same server.
+
+* A service that's able to swap out resources at will with another one of the same kind - internally managed or otherwise - just by changing a configuration value can be more easily deployed to different environments, tested and maintained. 
+
+********************************************************************************************************
+
+**V. Build, Release And Run**
+* *Strictly separate build and run stages*
+
+********************************************************************************************************
+
+**VI. Processes**
