@@ -108,10 +108,50 @@ Fault Forecasting: Identify the presence, creation, and consequence of faults.
 ********************************************************************************************************
 
 **I. Codebase**
-* One codebase tracked in revision control, many deploys.
+* *One codebase tracked in revision control, many deploys.*
 * For any given service, there should be exactly 1 codebase that's used to produce any no. of immutable releases for multiple deployments to multiple environments.
 
 * Having multiple services sharing the same code tends to lead to a blurring of the lines, trending in time to something like a monolith, making it harder to make changes in one part of the service without affecting other part or other service.
 * Shared code should be refactored into libraries that can be individually versioned and included through a dependency manager.
 
 * Having a single service spread across multiple repos makes it nearly impossible to automatically apply the build and deploy phases of your service's life cycle.
+
+********************************************************************************************************
+
+**II. Dependencies**
+* *Explicitly declare and isolate code dependencies*.
+* For any given version of the codebase, go build, go test, and go run should be deterministic: they should have the same result however they're run, and the product should respond the same way to the same inputs.
+* What if a dependency changes in such a way that it introduces a bug?
+    * Most programming languages offer a packaging system for distributing support libraries.
+    * Go uses go modules to ensure that imported packages won't change.
+* Services should try to avoid using the os/exec package's Command function to shell out to external tools like ImageMagick or curl.
+
+********************************************************************************************************
+
+**III. Configuration**
+* *Store configuration in the environment*.
+* Anything that's like to vary between environments should always be cleanly separated from the code.
+* Configuration files may include but not limited to:
+    * URLs or other resource handles to a database or upstream service.
+    * Secrets of any kind.
+    * Per environment values.
+* YAML ==> commonly used configuration.
+* Instead of configurations as code or external configurations, it should be stored as environment variables:
+    * They are standard and largely OS and language agnostic.
+    * They are easy to change between deploys without changing any code.
+    * They are very easy to inject into containers.
+* Tools in Go for this:
+    * os package is the most basic.
+        * os.GetEnv("NAME")
+    * spf13/viper
+        * viper.BindEnv("id")   // will be uppercased automatically
+        * viper.SetDefault("id", 13)
+        * viper.GetInt("id")    // 13
+        * os.SetEnv("ID", "50") // typically done outside of the app.
+        * viper.GetInt("id")    // 50
+    * Viper provides a no. of additional features: 
+        * Default values.
+        * Type variables.
+        * Reading from command-line flags, variously formatted configuration files, and even remote configuration systems like etcd, Consul.
+
+********************************************************************************************************
