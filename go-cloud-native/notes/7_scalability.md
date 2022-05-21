@@ -87,3 +87,66 @@ Autoscaling
     * If a service knows that the result of certain request will be same, irrespective of which replica makes the request, cacheability becomes easier.
 
 **Scaling Postponed: Efficiency**
+
+* Efficiency: Ability of a system to handle changes in demand without having to add(or greatly over-provision) dedicated resources.
+* If a language has a relatively high per-process concurrency overhead - often the case with dynamically typed languages - it will consume all available memory or compute resources much more quickly than a light-weighed language, and require resources and more scaling events to support the same demand.
+
+**Efficient Caching Using An LRU Cache**
+
+* Requirements for Cache:
+    * Supports *concurrent* read, write and delete operations.
+    * Scales well as the number of *cores and goroutines increase*.
+    * Won't grow wihout limit to consume all available memory.
+* hashicorp/golang-lru ==> well documented, includes sync.RWMutex for concurrency safety.
+
+* Hashicorp's library contains 2 construction functions: 
+
+// New creates an LRU Cache with the given capacity
+func New(size int) (*Cache, error)
+
+// NewWithEvict creates an LRU Cache with the given capacity, and also accepts an
+// "eviction callback" function that's called when an eviction occurs.
+// Can be used for saving somewhere else, like in disk.
+func NewWithEvict(size int, ) (*Cache, error) 
+
+* Common methods: 
+
+func (c *Cache) Add(key, value interface{}) (evicted bool)
+func (c *Cache) Contains(key interface{}) bool
+func (c *Cache) Get(key interface{}) (value interface{}, ok bool)
+func (c *Cache) Len() int
+func (c *Cache) Remove(key interfaceP{}) (present bool)
+
+* Limitation of LRU: At very high levels of concurrency - on the order of several millions operations per second, it will start to experience some contention.
+
+* What is contention? 
+    * A conflict over access to a shared resource.
+
+**Efficient Synchronization**
+
+* Don't communicate by sharing memory; share memory by communicating.
+* Channels + Goroutines can allow locks to be dispensed with altogether.
+* Channel shine when:
+    * Working with many discrete values.
+    * Passing ownership of data.
+    * Distributing units of work.
+    * Communicating async results.
+* Mutexes:
+    * Synchronizing access to caches or other large stateful structures.
+
+**Share Memory By Communicating**
+
+* Threading is easy; locking is hard.
+* Example to show how channel can make concurrency easier compared to locks.
+* A program that polls a list of URLs.
+
+**Reduce Blocking With Buffered Channels**
+
+* In case of unbuffered channels, every send blocks until there is a corresponding receive.
+* Sends from a channel only block when a buffer is full and receives only block when a buffer is empty.
+* Buffered channels are especially useful for handling "bursty" loads.
+* In FileTransactionLogger implementation, if events was a standard channel, each send would block until the receiving goroutine method completed a receive operation.
+* That might be fine most of the time, but if several writes came in faster than the goroutine could actually process them, the upstream client would be blocked.
+* With size of 16, the 17th closely clustered write would block.
+
+* Using buffered channels creates a risk of data loss should the program terminate before any consuming goroutines are able to clear the buffer.
