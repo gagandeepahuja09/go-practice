@@ -171,3 +171,27 @@ func ThreadSafeWrite(key, value string) {
 * Lock Contention: As the no. of concurrent processes acting on the data increases, the avg amount of time that the process spends waiting for the locks to be released also increases.
 * This could be solved by scaling the no. of instances of the cache service. But this would increase the complexity and latency, as distributed locks needs to be established and writes need to establish consistency.
 * Vertical sharding: Only a portion of the overall structure needs to be locked at a time, decreasing the overall lock contention.
+
+*************************************************************************************
+
+**Memory leaks can... fatal error: runtime: out of memory**
+
+* Memory leaks: Class of bug in which memory is not released even after it's no longer needed.
+* More subtle in languages like C++ where memory is manually managed.
+* Garbage collected languages like Go aren't immune to memory leaks:
+    * Data structures can still grow unbounded.
+    * Unresolved goroutines can still accumulate.
+    * There could be unstopped time.Ticker values.
+
+**Leaking Goroutines**
+* Goroutines are the single largest source of memory leaks in Go(no data to prove it).
+* Whenever a goroutine is executed, it's initially allocated a small memory stack - 2048 bytes - that can be dynamically adjusted up or down as it runs to suit the needs of the process.
+* The maximum stack size is reflective of the amount of available physical memory.
+* When a goroutine returns, its stack is either deallocated or set aside for recycling.
+    * Whether by design or by accident, not every goroutine actually returns. Eg. a goroutine is reading from a channel to which we don't write anything.
+    * If such a function is called regularly the total amount of memory consumed will slowly increase over time until it's completely exhausted.
+    * It's hard to know whether such a process was created intentionally.
+* Dave Cheney advice: 
+    * You shouldn't start a goroutine without knowing how it will stop.
+    * If you don't know how and when a goroutine will exit, that's a potential memory leak.
+
