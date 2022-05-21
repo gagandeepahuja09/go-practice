@@ -195,3 +195,9 @@ func ThreadSafeWrite(key, value string) {
     * You shouldn't start a goroutine without knowing how it will stop.
     * If you don't know how and when a goroutine will exit, that's a potential memory leak.
 
+**Forever ticking tickers**
+* time.Ticker => fires repeatedly at some specified interval.
+    * Why can't we use time.Sleep instead? We have a better control on closing this via listening to done channel.
+* time.Timer  => fires at some point in the future.
+* Problem: running time.Ticker values contain an active goroutine that can't be cleaned up.
+* By calling ticker.Stop(), we shut down the underlying ticker allowing it to be recovered by the garbage collector.
