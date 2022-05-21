@@ -150,3 +150,24 @@ func (c *Cache) Remove(key interfaceP{}) (present bool)
 * With size of 16, the 17th closely clustered write would block.
 
 * Using buffered channels creates a risk of data loss should the program terminate before any consuming goroutines are able to clear the buffer.
+
+**Minimizing Locks With Sharding**
+
+* Channels can't solve every concurrency problem.
+* Example: A large, central data structure such as cache, that can't be easily decomposed into discrete units of work.
+* When shared data structures have to be concurrently accessed, it's standard to use locking mechanism such as mutex. eg. a struct that contains a map and an embedded sync.RWMutex.
+
+var cache = struct {
+    sync.RWMutex
+    data map[string]string
+}{ data: make(map[string]string)}
+
+func ThreadSafeWrite(key, value string) {
+    cache.Lock()
+    cache.data[key] = value
+    cache.Unlock()
+}
+
+* Lock Contention: As the no. of concurrent processes acting on the data increases, the avg amount of time that the process spends waiting for the locks to be released also increases.
+* This could be solved by scaling the no. of instances of the cache service. But this would increase the complexity and latency, as distributed locks needs to be established and writes need to establish consistency.
+* Vertical sharding: Only a portion of the overall structure needs to be locked at a time, decreasing the overall lock contention.
