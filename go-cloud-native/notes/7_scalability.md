@@ -46,7 +46,7 @@ Autoscaling
 * The amount of data that can be stored in main memory.
 * Scaling strategies:
     * Offloading the data from memory to disk(at the expense of disk I/O).
-    * Offloading the data to an external dedicated cache(at the expense of network I/O).
+    * Offloading the data to an external dedicated cache(at the expense of network I/O.
     * Simply increasing the amount of available memory.
 
 *Disk I/O*
@@ -57,3 +57,33 @@ Autoscaling
 *Network I/O*
 * Translates directly into how much data the network can transmit per unit of time.
 * Scaling strategies for network I/O are often limited.
+
+**************************************************************************************
+
+**State And Statelessness**
+
+* We shouldn't store any state in the application server.
+* How can a service then implement in-memory caching. Via pub-sub listen to any changes done and write to all servers.
+* State: Set of an application's variables which if changed affect the behavior of the application. 
+
+**Application State Vs Resource State**
+* *Application State*: When an application needs to remember an event locally.
+* *Resource State*: It is the same for every client and has nothing to do with the action of clients.
+* Saying that an application is stateless doesn't mean that it doesn't, just that it's designed in such a way that it's free of any local persistent data.
+
+* Multiple instances of a stateful service will quickly find their individual states diverging due to different inputs being received by each replica.
+* Server affinity provides a workaround for this, but it can pose considerable data risk, since the failure of a single server is likely to result in loss of data.
+
+**Advantages Of Statelessness**
+
+* Scalability
+    * Each server can handle any request, allowing applications to grow, shrink, or be restarted without loosing data required to handle any in-flight session or requests.
+    * Very important for autoscaling, because the pods can(and will) be created and destroyed unexpectedly.
+* Durability
+    * Data that lives in only one place can get lost when that replica goes away for any reason.
+* Simplicity
+    * Don't require maintaining service-side state synchronization, consistency and recovery logic makes stateless APIs less complex, hence easier to debug, maintain and build.
+* Cacheability  
+    * If a service knows that the result of certain request will be same, irrespective of which replica makes the request, cacheability becomes easier.
+
+**Scaling Postponed: Efficiency**
