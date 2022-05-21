@@ -90,6 +90,8 @@ Autoscaling
 
 * Efficiency: Ability of a system to handle changes in demand without having to add(or greatly over-provision) dedicated resources.
 * If a language has a relatively high per-process concurrency overhead - often the case with dynamically typed languages - it will consume all available memory or compute resources much more quickly than a light-weighed language, and require resources and more scaling events to support the same demand.
+* Why are dynamically typed languages slow?
+    * Because they must make all their checks at runtime and type is not known to us at the start.
 
 **Efficient Caching Using An LRU Cache**
 
@@ -172,7 +174,7 @@ func ThreadSafeWrite(key, value string) {
 * This could be solved by scaling the no. of instances of the cache service. But this would increase the complexity and latency, as distributed locks needs to be established and writes need to establish consistency.
 * Vertical sharding: Only a portion of the overall structure needs to be locked at a time, decreasing the overall lock contention.
 
-*************************************************************************************
+***************************************************************************************************
 
 **Memory leaks can... fatal error: runtime: out of memory**
 
@@ -201,3 +203,14 @@ func ThreadSafeWrite(key, value string) {
 * time.Timer  => fires at some point in the future.
 * Problem: running time.Ticker values contain an active goroutine that can't be cleaned up.
 * By calling ticker.Stop(), we shut down the underlying ticker allowing it to be recovered by the garbage collector.
+
+***************************************************************************************************
+
+**Service Architectures**
+
+**Monolith Service**
+* Problems: 
+    * Making even a small change requires a new version of the entire monolith to be built, tested and deployed.
+    * Cascading failures.
+    * Despite the best of intentions and efforts, monolith code tends to decrease in modularity over time, making it harder to make changes in one part of the service without affecting another in unexpected ways.
+    * Scaling the application means creating replicas of the entire application, not just the parts that need it. 
