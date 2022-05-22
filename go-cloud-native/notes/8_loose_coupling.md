@@ -91,3 +91,47 @@
 * *GraphQL*
     * Query & manipulation language generally considered an alternative to REST.
     * Particularly powerful when working with complex datasets.
+
+
+**Issuing HTTP Requests with net/http**
+
+* net/http includes convenience functions for GET, HEAD, POST methods.
+func Get(url string) (*http.Response, error)
+
+* A small selection of the http.Response struct:
+
+type Response struct {
+    Status          string  // eg. "200 OK"
+    StatusCode      int     // eg. 200
+
+    // Header map header keys to values
+    Header Header
+
+    // Body represents the response body
+    Body io.ReadCloser
+
+    // ContentLength records the length of the associated content. The value
+    // -1 indicates that the length is unknown.
+    ContentLength int64
+
+    // Request is the request that was sent to obtain this response
+    Request *Request
+}
+
+* Body field provides access to the HTTP response body.
+* It's a ReadClose interface, which tells us 2 things:
+    * The response body is streamed on demand, as it is read.
+    * It has a Close method which we are expected to call.
+* Failing to close our body can lead to memory leaks.
+* io.ReadAll of response.Body would return a []byte slice.
+
+**Issuing POST HTTP Requests**
+
+* There are 2 convenience functions: Post, PostForm.
+
+// Post issues a POST to the specified URL.
+func Post(url, contentType string, body io.Reader) (*Response, error)
+
+// PostForm issues a POST to the specified URL, with data's keys 
+// and values URL-encoded as the request body.
+func PostForm(url string, data url.Values) (*Response, error) 
