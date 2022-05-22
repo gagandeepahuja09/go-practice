@@ -119,7 +119,7 @@ type Response struct {
 }
 
 * Body field provides access to the HTTP response body.
-* It's a ReadClose interface, which tells us 2 things:
+* It's a ReadCloser interface, which tells us 2 things:
     * The response body is streamed on demand, as it is read.
     * It has a Close method which we are expected to call.
 * Failing to close our body can lead to memory leaks.
@@ -135,3 +135,39 @@ func Post(url, contentType string, body io.Reader) (*Response, error)
 // PostForm issues a POST to the specified URL, with data's keys 
 // and values URL-encoded as the request body.
 func PostForm(url string, data url.Values) (*Response, error) 
+
+**A Possible Pitfall of Convenience functions**
+* What does convenience functions mean?
+* If we check the implementation of http.Get, we can see that it calls DefaultClient.Get.
+* Because http.Client is concurrency safe, it's possible to have only one of these pre-defined as a package variable.
+* DefaultClient is a zero-value http.Client.
+    var DefaultClient = &Client{}
+* This has a timeout of 0. Which is interpreted as no timeout.
+* If the server doesn't respond and doesn't close the connection, then it could result in a nondeterministic memory leak.
+* For adding timeouts, we need to add a custom client.
+
+var client = &http.Client{
+    Timeout: time.Second * 10,
+}
+response, err := client.Get(url)
+
+**Remote Procedure Calls With gRPC**
+* Efficient, polyglot data exchange framework.
+* REST is essentially a set of unenforced best practices.
+* RPC frameworks allow a client to execute a specific method implemented on different systems as if they were local functions.
+
+Advantages:
+
+* *Conciseness*: Its messages are more compact, consuming less network I/O.
+
+* *Speed*: Its binary exchange format is much faster to marshal and unmarshal.
+
+* *Strong-typing*: Eliminates a lot of boilerplate and removes common sources of errors.
+
+* *Feature-rich*: No. of built-in features like authentication, encryption, compression, timeouts.
+
+Few Possible Disadvantages:
+
+* *Contract driven*: gRPC's contracts make it less suitable for external facing services.
+
+* *Binary format*: gRPC data isn't human readable, making it harder to inspect and debug.
