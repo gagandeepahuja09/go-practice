@@ -44,7 +44,7 @@
 **Shared dependencies: Distributed Monolith**
 * We all know that microservice architecture is generally more desirable than monolith but that is easier said than done.
 * This is because, it's so easy to accidentally create a distributed monolith: a microservice-based system containing tightly coupled components.
-* Distribute Monolith ==> Worst of all worlds.
+* Distributed Monolith ==> Worst of all worlds.
 * Problems:
     * Services often can't be deployed independently, so deployments have to be carefully orchestrated.
     * Cascading failures.
@@ -65,3 +65,29 @@
 * With ephemeral, microservices-based applications, the service lifespan is reduced to minutes/seconds rather than years/months.
 * In such dynamic environments, URLs and traditional DNS has become another form of tight coupling.
 * This need for dynamic, fluid service discovery has driven the adoption of entirely new strategies like the *service mesh*, a dedicated layer for facilitating service-to-service communications between resources in a distributed system.
+
+*******************************************************************************
+
+**Communication Between Services**
+* In order for services to communicate, they must first establish an implicit or explicit that defines how messages will be structured.
+* While such a contract is necessary, it also effectively couples the components that depend on it.
+
+* Does the protocol allow backward- and forward-compatible changes, like protocol buffers and gRPC?
+* Or do minor changes to the contract effectively break communications, as is the case with SOAP?
+
+**Request-Response Messaging**
+* Point-to-point: one request, one receiver.
+* Requires the requesting process to pause until it receives a response.
+
+**Common Request-Response Implementations**
+
+* *REST*
+    * Human-readable and easy to implement, making it a good choice for outward-facing services.
+
+* *RPC*
+    * RCP frameworks allow programs to execute procedures in a different address space, often on another computer.
+    * 2 big language agnostic RPC players: gRPC, Apache Thrift.
+
+* *GraphQL*
+    * Query & manipulation language generally considered an alternative to REST.
+    * Particularly powerful when working with complex datasets.
