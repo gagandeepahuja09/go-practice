@@ -185,4 +185,38 @@ Few Possible Disadvantages:
     * They are used to identify fields in the message binary format, and should not be changed once your message type is in use.
     * Protobufs ensure that it doesn't lead to tight coupling:
         * Fields can be removed, as long as the field number is not used again in your updated message type.
-        * We can mark the field as reserved so that they can't be accidentally reused. 
+        * We can mark the field as reserved so that they can't be accidentally reused.
+* C++ like syntax.
+
+**The key-value message structure** 
+* Implementing gRPC equivalents to the Get, Put and Delete functions we are already exposing via RESTful methods.
+* We don't include error and status in the message response definitions. They are unnecessary because they are included in the return values of the gRPC client functions.
+
+**Defining our service methods**
+
+**Compiling protocol buffers**
+* Using protoc command.
+* We use the --go_out option since we want go code.
+* go_opt and go-grpc_opt tells protoc to place the output files in the same relative directory as the input file.
+* 2 files created ==> keyvalue.pb.go and keyvalue_grpc.pb.go
+* 
+    protoc --proto_path=$SOURCE_DIR \
+    --go_out=$DEST_DIR --go_opt=paths=source_relative \
+    --go-grpc_out=$DEST_DIR --go-grpc_opt=paths=source_relative \
+    $SOURCE_DIR/keyvalue.proto
+* go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest                               
+* export SOURCE_DIR=go-cloud-native/distributed-key-val-store/keyvalue
+    if you are in go-practive directory.
+
+**Implementing the gRPC service**
+* To implement our gRPC server, we'll need to implement the generated service interface. Can be found in keyvalue_grpc.pb.go.
+* In KeyValueServer interface, each method accepts a context.Context and a request pointer and returns a response pointer and an error.
+* As a side effect of its simplicity(interfaces), it becomes quite easy to mock requests to, and responses from a gRPC server implementation. 
+* We can implement our key value gRPC server by embedding the UnimplementedKeyValueServer struct.
+* The UnimplementedKeyValueServer by default already implements all the methods.
+* Steps involved:
+    1. *Create the server struct*: It should embed UnimplementedXXXServer
+    2. *Implement the service methods*: Since UnimplementedXXXServer includes for all the service methods, we don't have to implement them right away.
+    3. *Register our gRPC server*: Create a new instance of server struct and register it with the gRPC framework.
+    4. *Start accepting connections*.
+* gRPC provides the best of both worlds by providing the freedom to implement any of the desired functionality without having to be concerned with building many of the tests and checks usually associated with a RESTful service.
