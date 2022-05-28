@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -90,15 +89,15 @@ func keyValueGetHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(value))
 }
 
-func main() {
-	err := initializeTransactionLog()
-	if err != nil {
-		log.Fatalf("failed to initialize transaction log: %v", err)
-	}
+// func main() {
+// 	err := initializeTransactionLog()
+// 	if err != nil {
+// 		log.Fatalf("failed to initialize transaction log: %v", err)
+// 	}
 
-	r := mux.NewRouter()
-	r.HandleFunc("/v1/{key}", keyValuePutHandler).Methods("PUT")
-	r.HandleFunc("/v1/{key}", keyValueGetHandler).Methods("GET")
+// 	r := mux.NewRouter()
+// 	r.HandleFunc("/v1/{key}", keyValuePutHandler).Methods("PUT")
+// 	r.HandleFunc("/v1/{key}", keyValueGetHandler).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8080", r))
-}
+// 	log.Fatal(http.ListenAndServe(":8080", r))
+// }
