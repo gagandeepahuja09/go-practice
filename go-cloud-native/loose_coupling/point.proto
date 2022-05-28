@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+// the option key specifies the full import path of the Go package that will contain
+// the generated code
+option go_package = "github.com/go-cloud-native/loose-coupling/point";
+
+message Point {
+    int32 x = 1;
+    int32 y = 2;
+    string label = 3;
+}
+
+message Line {
+    Point start = 1;
+    Point end = 2;
+    string label = 3;
+}
+
+message Polyline {
+    repeated Point point = 1;
+    string label = 2;
+}

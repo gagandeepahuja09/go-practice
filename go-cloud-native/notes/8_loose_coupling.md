@@ -168,6 +168,21 @@ Advantages:
 
 Few Possible Disadvantages:
 
-* *Contract driven*: gRPC's contracts make it less suitable for external facing services.
+* *Contract driven: Only internal services*: gRPC's contracts make it less suitable for external facing services.
 
-* *Binary format*: gRPC data isn't human readable, making it harder to inspect and debug.
+* *Binary format: Not human readable*: gRPC data isn't human readable, making it harder to inspect and debug.
+
+**Interface Definition With Protocol Buffers(IDL)**
+* As with most RPC frameworks, gRPC requires you to define a service interface.
+* gRPC frameworks implement the resulting source code to handle client calls.
+* The client has a stub that provides the same methods as the server.
+
+**The message definition structure**
+* *Protobufs*: 
+    * Language-neutral mechanism for serializing structured data.
+    * Kind of like binary version of XML.
+* Each field in a message definition has a field number that is unique for that message type. 
+    * They are used to identify fields in the message binary format, and should not be changed once your message type is in use.
+    * Protobufs ensure that it doesn't lead to tight coupling:
+        * Fields can be removed, as long as the field number is not used again in your updated message type.
+        * We can mark the field as reserved so that they can't be accidentally reused. 
