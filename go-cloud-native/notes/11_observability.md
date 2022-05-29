@@ -17,3 +17,29 @@
     * How can we pinpoint a defect in a single component within the complex web of higly distributed system.
 
 **How is observability different from traditional monitoring**
+* Traditionally monitoring focuses on asking questions in the hope of identifying or predicting some *expected or previously observed failures*.
+    * Assumption is that the system is expected to fail in a specific, predictable way.
+    * When a new failure mode is discovered(usually the hard way) - its symptoms are added to the monitoring suite and the process begins again.
+    * Problems:
+        * Asking new questions of a system often means writing and shipping new code. Not flexible, scalable + super annoying.
+        * At a certain level of complexity, the no. of "unknown unknowns" in a system start to overwhelm the no. of "known unknowns".
+* Monitoring is something that you do to find out if a system isn't working. Observability is a property a system has that lets you ask why it isn't working.
+
+**The 3 Pillars Of Observability**
+
+* *Tracing(or Distributed Tracing)*
+    * Follows a request as it propagates through a distributed system, allowing the entire end-to-end request flow to be reconstructed as a DAG called a *trace*.
+    * Analysis of these traces can provide insights into how a system's components interact, making it possible to pinpoint failures and performance issues.
+
+* *Metrics*:
+    * Collection of numerical data points representing the state of various aspects of a system at specific points in time.
+    * Can be useful to highlight trends, identify anomalies, and predict future behaviour.
+
+* *Logging*:
+    * Appending records of noteworthy events to an immutable record - the log - for later review and analysis.
+    * Can take various forms, from a continuously appended file on disk to a full-text search engine like ES.
+    * Valuable, context-rich insights application-specific events emitted by processes.
+    * Not having structured logs can largely reduce their utility.
+
+**The (So-Called) 3 Pillars**
+* Just having logging, metrics, and tracing won't necessarily make a system more observable. 
