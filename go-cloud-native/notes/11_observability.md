@@ -43,3 +43,33 @@
 
 **The (So-Called) 3 Pillars**
 * Just having logging, metrics, and tracing won't necessarily make a system more observable. 
+
+**OpenTelemetry**
+* Unlike most CNCF projects, it isn't a service per se.
+* It's an effort to standardize how telemetry data - traces, metric and eventually (logs) are expressed, collected, and transferred.
+* There are many vendors and tools in the instrumentation space.
+* OpenTelemetry seeks to unify this space by a vendor-neutral specification that standardizes how telemetry data is collected and sent to backend platforms.
+
+**The OpenTelemetry Components**
+* OpenTelemetry extends and unifies earlier attempts at creating telemetry standards, by including abstractions and extension points in the SDK where you can insert your own implementation.
+* This makes it possible to implement custom exporters that can interface with a vendor of your own choice.
+* Core Components:
+
+* *Specifications*: These describe the requirements and expectations for all OpenTelemetry APIs, SDKs, and data protocols.
+
+* *API*: Language specific interfaces and implementations based on the specifications that can be used to add OpenTelemetry to an application.
+
+* *SDK*: 
+    * The concrete OpenTelemetry implementations that sit between the APIs and the Exporters, provide functionality like (for example) *state tracking* and *batching data* for transmission.
+    * It also provides a no. of configuration options for behaviors like *request filtering* and *transaction sampling*.
+
+* *Exporters*:
+    * In-process SDK plug-ins that are capable of sending data to a specific destination which may be local(log file or stdout) or remote(Jaeger or some commercial solution).
+    * Exporters decouple the intrumentation from the backend, making it possible to change destinations without having to reinstrument the code.
+
+* *Collector*:
+    * Optional but very useful vendor-agnostic service that can receive and process telemetry data before forwarding it to one or more destinations.
+    * Can run as a sidecar process alongside your application or a standalone proxy elsewhere.
+    * Can be particularly useful in the kind of tightly controlled environments that are common in the enterprise.
+
+* OpenTelemetry is only concerned with the collection, processing, and sending of telemetry data, and relies on you to provide a telemetry backend to receive and store the data.
