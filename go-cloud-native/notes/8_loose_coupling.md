@@ -220,3 +220,44 @@ Few Possible Disadvantages:
     3. *Register our gRPC server*: Create a new instance of server struct and register it with the gRPC framework.
     4. *Start accepting connections*.
 * gRPC provides the best of both worlds by providing the freedom to implement any of the desired functionality without having to be concerned with building many of the tests and checks usually associated with a RESTful service.
+
+**Implementing the gRPC Client**
+* The generate client interface will be name XXXClient
+
+    type KeyValueClient interface {
+        Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+        ...
+    }
+
+* All of the client methods(stubs) are already implemented, hence we need not worry about their implementation.
+* Each method accepts a request type pointer, and returns a response type pointer and an error.
+* Additionally each method accepts a context.Context and zero or more instances of grpc.CallOption.
+* CallOption is used to modify the behaviour of the client when it executes its calls.
+* Options used in our example:
+    * WithInsecure: Disables transport security for its ClientConn. Don't use insecure connections in production.
+    * WithBlock: Makes dial a block until a connection is established, otherwise the collection will occur in the background.
+    * WithTimeout: Makes a blocking dial throw an error if it takes longer than specified amount of time.
+* **Best Part**: These functions look and feel exactly like function calls. No checking status-codes, hand-building our own clients, or any other funny business.
+
+**********************************************************************************
+
+**Loose Coupling Local Resources with Plug-ins**
+* It's often useful to build services or tools that can accept data from different kinds of input sources(such as REST interface, a gRPC interface, and a chatbot interface) or generate different kinds of outputs(such as generating different kinds of logging or metric formats).
+* Added bonus: designs that support such modularity can also make mocking resources for testing dead simple. 
+
+**In-Process Plug-ins with the plugin Package**
+* Go provides native plug-in support via standard *plugin package*.
+    * It's used to open and access go plug-ins. Not necessary to actually build the plug-in themselves.
+* 3 requirements of Go plug-in:
+    * It must be in the main package.
+    * It must export one or more functions or variables.
+    * It must be compiled using the -buildmode=plugin build flag.
+
+**********************************************************************************
+
+**Hexagonal Architecture**
+* aka "Ports and Adapters" pattern.
+* Uses *loose coupling* and *inversion of control* as its central design philosophy to establish clear boundaries b/w business and peripheral logic.
+* In a hexagonal application, the core application doesn't know any details at all about the outside world, operating entirely through loosely couple *ports* and technology specific *adapters*. 
+
+* This approach allows the application to expose different APIs(REST, gRPC, a test harness, etc) or use different data sources(database, message queues, local files, etc) without impacting its core logic or requiring major code changes.
