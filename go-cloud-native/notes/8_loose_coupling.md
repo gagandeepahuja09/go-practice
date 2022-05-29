@@ -253,6 +253,10 @@ Few Possible Disadvantages:
     * It must export one or more functions or variables.
     * It must be compiled using the -buildmode=plugin build flag.
 
+**Go plug-in Caveats**
+1. Only supported on Linux, FreeBSD, MacOS.
+2. 
+
 **********************************************************************************
 
 **Hexagonal Architecture**
@@ -261,3 +265,12 @@ Few Possible Disadvantages:
 * In a hexagonal application, the core application doesn't know any details at all about the outside world, operating entirely through loosely couple *ports* and technology specific *adapters*. 
 
 * This approach allows the application to expose different APIs(REST, gRPC, a test harness, etc) or use different data sources(database, message queues, local files, etc) without impacting its core logic or requiring major code changes.
+
+**The Architecture**
+* 3 Components:
+* *The Core Application*
+    * Represented by the hexagon.
+    * This contains all of the business logic.
+    * Has no direct reference to any technology, framework, or real world device.
+    * The business logic shouldn't depend on whether it exposes a REST API or a gRPC API, or whether it gets data from a database or a .csv file.
+    * Its only view of the world should be through ports.
