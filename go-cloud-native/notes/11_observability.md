@@ -159,3 +159,18 @@
     )
 
 **Creating a tracer provider**
+* Package: go.opentelemetry.io/otel/sdk/trace aliased to sdktrace.
+* A TracerProvider is a stateful value that serves as the main entry point for the OpenTelemetry tracing API.
+* It also provides access to the Tracer that in turn serves as the provider for new Span values.
+
+tp := sdktrace.NewTracerProvider(
+    sdktrace.WithSyncer(stdExporter),
+    sdktrace.WithSyncer(jaegerExporter))
+
+* There are several other options that can be provided to sdktrace.NewTracerProvider like defining a Batcher or SpanProcessor.
+
+**Setting the global tracer provider**
+* otel.SetTracerProvider(tp)
+* Setting the global tracer provider makes it discoverable via the otel.GetTracerProvider function.
+* This allows libraries and other dependencies that use the open telemetry API to more easily discover the SDK and emit telemetry data:
+    gtp := otel.GetTracerProvider()
