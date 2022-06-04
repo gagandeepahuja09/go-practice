@@ -107,6 +107,19 @@
 * This is common for both tracing & metrics.
 * The configuration phase is executed exactly once in a program, usually in the main function.
 * *Configuration steps*: 
-    1. Retrieve and configure the appropriate exporters for your target backends.
+    1. *Retrieving and configuring the appropriate exporters* for your target backends.
         * Tracing exporters implement the SpanExporter interface(OpenTelemetry).
-    2.  
+        * Also includes several stock exporters by OpenTelemetry.
+    2. *Passing the exporters and any other appropriate configuration options to the SDK to create the *tracer provider* *. 
+        * Tracer provider will serve as the main entry point for the open telemetry tracing API for the lifetime of our program.
+    3. *Setting the global tracer provider*.
+        * This make it discoverable via the otel.GetTracerProvider function.
+        * It allows the libraries and other dependencies that also use the OpenTelemetry API to more easily discover the SDK and emit telemetry data.
+
+* *Instrumenting code steps*:
+    1. *Obtaining a Tracer*
+        * Tracer interface: It has the central role of keeping track of trace and span information from the (usually global) tracer provider.
+    2. *Starting and ending spans*
+    3. *Setting span metadata*
+        * Includes timestamped messages called events or key/value pairs called attributes.
+
