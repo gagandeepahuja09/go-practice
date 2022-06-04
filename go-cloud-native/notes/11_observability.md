@@ -53,8 +53,8 @@
 **The OpenTelemetry Components**
 * OpenTelemetry extends and unifies earlier attempts at creating telemetry standards, by including abstractions and extension points in the SDK where you can insert your own implementation.
 * This makes it possible to implement custom exporters that can interface with a vendor of your own choice.
-* Core Components:
 
+* Core Components:
 * *Specifications*: These describe the requirements and expectations for all OpenTelemetry APIs, SDKs, and data protocols.
 
 * *API*: Language specific interfaces and implementations based on the specifications that can be used to add OpenTelemetry to an application.
@@ -73,3 +73,40 @@
     * Can be particularly useful in the kind of tightly controlled environments that are common in the enterprise.
 
 * OpenTelemetry is only concerned with the collection, processing, and sending of telemetry data, and relies on you to provide a telemetry backend to receive and store the data.
+
+*************************************************************************************
+
+**Tracing**
+
+* It's often the challenge to find the source of the problem before we can actually fix this.
+* Tracing helps to solve this problem by tracking requests as they propagate through the system - even across process, networks, and security boundaries.
+* Tracing can help:
+    * Pinpoint component failure.
+    * Identify performance bottlenecks.
+    * Analyze service dependencies.
+* Tracing is generally discussed in the context of distributed systems, but a complex monolith application can also benefit from tracing, especially if it contends for resources like network, disk or mutexes.
+
+**Tracing Concepts**
+
+* *Spans*: 
+    * Describes a unit of work performed by a request.
+    * Eg. a hop across the network or a fork in the execution flow.
+    * Each span has an associated name, a start and a duration.
+    * They can be and typically are nested and ordered to model a causal relationship.
+
+* *Traces*:
+    * Represents all of the events - individually represented as spans - that make up a request as it flows through a system.
+    * DAG of spans or stack trace where each span represents the work done by one component.
+
+* When a request begins in the first(edge) service, it creates the first span - the root span.
+* Root span is automatically assigned a globally unique trace ID, which is passed with each subsequent hop in the request lifecycle.
+* The next hop can either choose to insert or otherwise enrich the metadata associated with each request.
+
+**Tracing with OpenTelemetry**
+* 2 phases: configuration & instrumentation.
+* This is common for both tracing & metrics.
+* The configuration phase is executed exactly once in a program, usually in the main function.
+* *Configuration steps*: 
+    1. Retrieve and configure the appropriate exporters for your target backends.
+        * Tracing exporters implement the SpanExporter interface(OpenTelemetry).
+    2.  
