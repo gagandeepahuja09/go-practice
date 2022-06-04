@@ -123,3 +123,39 @@
     3. *Setting span metadata*
         * Includes timestamped messages called events or key/value pairs called attributes.
 
+
+**Creating the tracing exporters**
+* Tracing exporters implement the SpanExporter interface.
+* Which in otel 0.17.0 lives in go.opentelemetry.io/otel/sdk/export/trace aliased as export.
+* OpenTelemetry exporters are in-process plug-ins that know how to convert metric or trace data and send it to a particular destination.
+* The destination may be local(stdout or a log file) or remote(Jaeger or a commercial solution).
+
+* *The Console Exporter*
+    * Write telemetry data as JSON to stdout.
+    * Console exporter can be used to export metric telemetry.
+    * Package: go.opentelemetry.io/otel/ exporters/stdout package.
+    * Like most exporters' creation functions, stdout.NewExporter is a variadic function that can accept zero or more configuration options.
+        stdExporter, err := stdout.NewExporter(
+            stdout.WithPrettyPrint(),
+        ) 
+
+* *The Jaeger Exporter*
+    * It knows how to encode tracing telemetry data to the Jaeger distributed tracing system.
+    * https://www.jaegertracing.io/
+    * https://eng.uber.com/distributed-tracing/
+    * Jaeger key features:
+        * Multiple storage backends: Cassandra, ElasticSearch, Kafka, memory.
+        * Opentracing inspired data model.
+    * Both stdout.NewExporter and jaeger.NewExporter return an export.SpanExporter.
+
+    jaegerEndpoint := "http://localhost:14268/api/traces"
+    serviceName := "fibonacci"
+
+    jaegerExporter, err := jaeger.NewRawExporter(
+        jaeger.WithCollectorEndpoint(jaegerEndpoint),
+        jaeger.WithProcess(jaeger.Process{
+            ServiceName: serviceName,
+        }),
+    )
+
+**Creating a tracer provider**
