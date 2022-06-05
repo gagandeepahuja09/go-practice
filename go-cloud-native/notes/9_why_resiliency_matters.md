@@ -26,3 +26,13 @@
     * Fault components can be *reaped(cut)* or *intentionally allowed to fail* to benefit the health of the larger system.
 
 **Cascading failure**
+* One part of a system experiences a local failure - a reduction in capacity, an increase in latency, etc.
+* This causes the other components to attempt to compensate for the failed component in a way that exacarbates the problem, eventually leading to the failure of the entire system.
+
+* The classis cause of cascading failures is **overload**.
+    * Occurs when one or more node in a set fails, causing the load to be catastrophically redistributed to its survivors.
+    * The increase in load overloads the remaining nodes, causing them to fail from resource exhaustion, taking the entire system down.
+    * It can becomes difficult to scale our way out of the problem. New nodes can be overloaded as quickly as they come online, often contributing the feedback to the system down in the first place.
+    * Sometimes the only fix is to take your entire service down - by explicitly blocking the problematic traffic and then slowly reintroduce load.
+
+**Preventing Overload**
