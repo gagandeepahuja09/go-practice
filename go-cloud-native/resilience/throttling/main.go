@@ -2,7 +2,12 @@ package main
 
 import (
 	"context"
+	"log"
+	"net/http"
+	"os"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 // Effector is the function that you want to subject to throttling
@@ -11,6 +16,32 @@ type Effector func(context.Context) (string, error)
 // Throttled wraps an Effector. It accepts the same parameters, plus a UID string.
 // It returns the same, plus a bool that's true if call is not Throttled
 type Throttled func(context.Context, string) (bool, string, error)
+
+var throttledHostName = Throttle(getHostname, 1, 1, time.Second)
+
+func getHostname(ctx context.Context) (string, error) {
+	if ctx.Err() != nil {
+		return "", ctx.Err()
+	}
+
+	return os.Hostname()
+}
+
+func throttledHandler(w http.ResponseWriter, r *http.Request) {
+	ok, hostname, err := throttledHostName(r.Context(), r.RemoteAddr)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if !ok {
+		http.Error(w, "Too many requests", http.StatusTooManyRequests)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(hostname))
+}
 
 // A bucket tracks the request associate with a UID.
 type bucket struct {
@@ -67,5 +98,7 @@ func Throttle(e Effector, max uint, refill uint, d time.Duration) Throttled {
 }
 
 func main() {
-
+	r := mux.NewRouter()
+	r.HandleFunc("/hostname", throttledHandler)
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
