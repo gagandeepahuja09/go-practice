@@ -32,7 +32,24 @@
 * The classis cause of cascading failures is **overload**.
     * Occurs when one or more node in a set fails, causing the load to be catastrophically redistributed to its survivors.
     * The increase in load overloads the remaining nodes, causing them to fail from resource exhaustion, taking the entire system down.
-    * It can becomes difficult to scale our way out of the problem. New nodes can be overloaded as quickly as they come online, often contributing the feedback to the system down in the first place.
+    * It can become difficult to scale our way out of the problem. New nodes can be overloaded as quickly as they come online, often contributing the feedback to the system down in the first place.
     * Sometimes the only fix is to take your entire service down - by explicitly blocking the problematic traffic and then slowly reintroduce load.
 
 **Preventing Overload**
+* For *every service* there exists some *request frequency*, a threshold beyond which bad things will start to happen.
+
+Strategies
+
+**Throttling**
+* Limits the no. of requests that a user can make in a certain period of time.
+* Throttles are generally applied on a per-user basis to provide something like a usage quota, so that no one user can consume too much of service's resources.
+* We'll need a separate bucket for each user as per the token bucket implementation.
+* Throttle doesn't return an error when it's activated: it isn't an error, so we don't treat it as one.
+* The current implementation won't use a time.Ticker to explicitly add tokens to buckets on some regular cadence.
+* It refills buckets on demand, based on time elasped between requests. This strategy means that we don't have to dedicate background processes to filling buckets until they are actually used, which will scale much more effectively.
+
+**Load Shedding**
+
+**Graceful service degradation or fallbacks**
+* Strategically reducing the amount of work needed to satisfy each request instead of just rejecting requests.
+* Common approaches - falling back on cached data or less expensive - if less precise - algorithms.
