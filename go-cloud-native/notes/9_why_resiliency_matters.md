@@ -48,6 +48,10 @@ Strategies
 * The current implementation won't use a time.Ticker to explicitly add tokens to buckets on some regular cadence.
 * It refills buckets on demand, based on time elasped between requests. This strategy means that we don't have to dedicate background processes to filling buckets until they are actually used, which will scale much more effectively.
 
+**Issues with the throttle code**
+* Not concurrency safe. Requires locking on the bucket map.
+* There's no way to purge old records. In production, we would probably want to use something like an LRU cache.
+
 **Load Shedding**
 
 **Graceful service degradation or fallbacks**
