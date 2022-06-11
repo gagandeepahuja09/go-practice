@@ -53,7 +53,41 @@ Strategies
 * There's no way to purge old records. In production, we would probably want to use something like an LRU cache.
 
 **Load Shedding**
+* Used to predict when a server is approaching the saturation point and then mitigating the saturation by dropping some portion of traffic in a controlled fashion.
+* Ideally this will prevent the server from overloading and failing health checks, serving with high latency, or just collapsing in a graceless uncontrolled way.
+* Unlike quota based throttling, load shedding is generally used in response to depletion of a resource like CPU, memory or request-queue depth.
+* We will implement this by using gorilla mux middleware.
 
 **Graceful service degradation or fallbacks**
 * Strategically reducing the amount of work needed to satisfy each request instead of just rejecting requests.
 * Common approaches - falling back on cached data or less expensive - if less precise - algorithms.
+
+****************************************************************************************************
+
+**Playing it again: Retrying Requests**
+
+**Retry Storm**
+* Retry without any backoff or jitter.
+* When the downstream service failed, every single instance of our service entered its retry loop, making 1000s of request per second.
+* Brought the network to its knees so badly that we were forced to restart the entire system.
+
+* A well meaning logic intended to add resilience to a component acts against the larger system.
+* Even when the conditions that caused the downstream server to go down are resolved, it can't come back up because it's brought under too much load.
+
+**Backoff Algorithms**
+
+* *Fixed Backoff*
+
+    res, err := sendRequest()
+    for err != nil {
+        time.Sleep(2*time.Second)
+        res, err = sendRequest()
+    }
+* This might reduce the request count, but the overall number of requests is quite consistently high.
+* This doesn't scale well for large no. of retrying instances.
+
+* *Exponential Backoff*
+* We can't alway assume the following:
+    * Our service would be the only one retrying to the downstream service.
+    * We will have small number of instances not to overwhelm the network with retries.
+* In exp. backoff, the duration of the delays between retries roughly doubles with each attempt upto a certain maximum.
