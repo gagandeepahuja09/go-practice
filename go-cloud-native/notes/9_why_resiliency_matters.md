@@ -110,4 +110,6 @@ for backoff := base; err != nil; backoff <<= 1 {
 * If we don't use rand.Seed to provide a new seed value, they behave as if provided with rand.Seed(1) and alway produce the same random sequence of numbers.
 
 **Circuit Breaking**
-* Degrades 
+* Degrades potentially failing method calls as a way to prevent larger or cascading failures.
+
+* *Not all resilience patterns are defensive. Sometimes it pays to be a good neighbour*
