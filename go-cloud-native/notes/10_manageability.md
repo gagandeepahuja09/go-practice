@@ -39,3 +39,49 @@
 * The costs of managing a system can far exceed the costs of the underlying hardware and software.
 * Apart from management costs, manageability will also provide complexity reduction making it easier and faster to undo when it inevitably creeps in.
 * Hence it directly impacts reliability, availability and security.
+
+**Configuring Your Application**
+* Anything that's likely to be varied b/w environments - dev, stage, prod.
+* 12 factor app - III. Store configuration in the environment.
+
+* *Configuration should be cleanly separated from the code*
+
+* *Configuration should be stored in version control*
+    * Storing it in version control, separately from the code allows us to quickly roll back a config change.
+    * Deployment frameworks like Kubernetes provide config primitive like ConfigMap for this.
+
+* 3 Common ways to configure applications:
+    * Environment variables
+    * Command-line flags
+    * Configuration files
+
+**Configuration Good Practice**
+* *Version control your configurations*
+    * Makes it possible to:
+        * Review them before deployment.
+        * Quickly reference them afterwards.
+        * Quickly rollback a change if necessary. 
+
+* *Don't roll your own format*
+    * Standard formats: JSON, YAML, TOML.
+    * It you must roll your own format, be sure that you're comfortable with the idea of maintaining it and forcing any future maintainers to deal with it forever.
+
+* *Make the zero value useful*
+    * Don't use nonzero default values unnecessarily.
+    * The behavior that results from an undefined configuration should be acceptable, reasonable and unsuprising.
+
+**Configuring with Environment Variables**
+* Merits of using:
+    * Env vars are *universally supported*.
+    * They ensure that configuration don't get accidentally checked into the code.
+    * Generally require less code than configuration files.
+    * Perfectly adequate for small applications.
+
+* Demerits:
+    * We can't easily learn about the existence and behavior of environment variables by looking at an existing config file. Applications that rely on them can be harder to use and debug.
+
+* name := os.Getenv("NAME"). If variable is not present, Getenv will return an empty string. In order to distinguish between empty value and unset value, we can use os.LookEnv which returns both the value and a boolean.
+
+* For more sophisticated options like default values or typed variables, viper: a 3rd party package is fairly popular. 
+
+**Configuring with Command-Line Arguments**
