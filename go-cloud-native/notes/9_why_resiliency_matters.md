@@ -91,3 +91,23 @@ Strategies
     * Our service would be the only one retrying to the downstream service.
     * We will have small number of instances not to overwhelm the network with retries.
 * In exp. backoff, the duration of the delays between retries roughly doubles with each attempt upto a certain maximum.
+
+*Exponential backoff with jitter*
+* Random jitter to spread out the spikes.
+res, err := SendRequest()
+base, cap := time.Second(), time.Minute
+
+for backoff := base; err != nil; backoff <<= 1 {
+    if backoff > cap{
+        backoff = cap
+    }
+    jitter := rand.Int63n(int64(backoff*3))
+    sleep := base + time.Duration(jitter)
+    time.Sleep(sleep)
+    res, err = SendRequest()
+}
+
+* If we don't use rand.Seed to provide a new seed value, they behave as if provided with rand.Seed(1) and alway produce the same random sequence of numbers.
+
+**Circuit Breaking**
+* Degrades 
