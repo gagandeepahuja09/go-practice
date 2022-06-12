@@ -85,3 +85,15 @@
 * For more sophisticated options like default values or typed variables, viper: a 3rd party package is fairly popular. 
 
 **Configuring with Command-Line Arguments**
+* They are definitely worth considering, atleast for smaller, less complex applications.
+* Merits:
+    * They are explicit.
+    * They have out-of-the-box type support.
+    * They details of their existence and usage are generally available via a --help option.
+
+**The standard flag package**
+* Example code: flag.go
+* go run . -help --> to see the summary of the flags.
+* Problems with flag package:
+    * Flag syntax is non-standard. Standard: long form like version with two dashes => --version. short form with single dash => -v.
+    * It only parses flags. We can map commands to functions. 
