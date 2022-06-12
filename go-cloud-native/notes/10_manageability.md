@@ -96,4 +96,44 @@
 * go run . -help --> to see the summary of the flags.
 * Problems with flag package:
     * Flag syntax is non-standard. Standard: long form like version with two dashes => --version. short form with single dash => -v.
-    * It only parses flags. We can map commands to functions. 
+    * It only parses flags. We can map commands to functions.
+
+**The Cobra command-line parser** 
+* It's used in a number of high profile projects like Docker, Kubernetes, Istio, Helm, CockroachDB.
+* Merits
+    * Provides fully POSIX-compliant flags.(short and long versions).
+    * Supports nested subcommands.
+    * Automatically generates help output and autocomplete for various shells.
+* Demerits
+    * Quite complex relative to the flags package.
+
+********************************************************************************
+
+**Configuring with Files**
+* Merits:
+    * They tend to be more explicit and comprehensible by allowing behaviors to be logically grouped and annotated.
+    * Understanding how to use a config file is just a matter of looking at its structure or an example of its use.
+    * They are particularly useful when managing a large number of options. With command line flags, it can result in pretty long statements.
+
+* Possible demerits:
+    * Distributing config files at scale can be a challenge.
+        * We can instead use distributed key-value store such as etcd and consul for such use cases.
+        * Most orchestraction platforms provide specialized configuration resource like Kubernetes ConfigMap that largely alleviate the distribution problem.
+
+**Our configuration data structure**
+* Two general ways in which configuration can be unmarshalled:
+    * *Mapping corresponding fields in a specific struct type*. Eg. host: localhost can be unmarshalled into a struct type that has a Host string field.
+    * Unmarshalling into one or more possibly nested maps of type map[string]interface{}.
+        * This can be convenient when working with arbitrary configurations, but can be very akward to work with.
+
+* If we are aware of what our configuration is going to look like, which is very likely the case, approach 1 is the most appropriate.
+
+type Config struct {
+    Host string
+    Port uint16
+    Tags map[string]string
+}
+
+* For a struct to be marshallable or unmarshallable, it must begin with a capital letter to indicate that it's exported by its package.
+
+**Working with JSON**
