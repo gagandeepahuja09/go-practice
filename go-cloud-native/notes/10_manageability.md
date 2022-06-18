@@ -137,3 +137,24 @@ type Config struct {
 * For a struct to be marshallable or unmarshallable, it must begin with a capital letter to indicate that it's exported by its package.
 
 **Working with JSON**
+Demerits:
+    * Considered lesser user-friendly than YAML.
+    * Unforgiving syntax: can easily be broken by a misplaced or missing comma.
+    * Doesn't support comments.
+
+**Encoding JSON**
+* It might seem strange but encoding is the first step for understanding how to decode JSON.
+* It provides a handy means of generating, testing and debugging our configuration files.
+* Go's standard encoding/json package.
+    func Marshal(v interface{}) ([]byte, error)
+* The JSON.Mashal function traverses the value of v recursively, so any internal structs will be encoded as nested JSON.
+* We can also use JSON.MarshalIndent which returns pretty printed JSON. This can be very useful for bootstrapping configuration files.
+    json.MarshalIndent(v interface{}, prefix, indent string) ([]byte, error)
+
+**Decoding JSON**
+* func Unmarshal(data []byte, v interface{}) error
+* json.Unmarshal will only decode the fields that it can find in the target type. The feature can be quite useful if we want to cherry pick a few specific fields out of a big JSON blob. 
+
+**Working with YAML**
+
+**Watching for configuration file changes**
