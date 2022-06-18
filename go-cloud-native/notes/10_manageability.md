@@ -153,8 +153,42 @@ Demerits:
 
 **Decoding JSON**
 * func Unmarshal(data []byte, v interface{}) error
-* json.Unmarshal will only decode the fields that it can find in the target type. The feature can be quite useful if we want to cherry pick a few specific fields out of a big JSON blob. 
+* json.Unmarshal will only decode the fields that it can find in the target type. The feature can be quite useful if we want to cherry pick a few specific fields out of a big JSON blob.
 
-**Working with YAML**
+**Decoding arbitrary JSON**
+
+**Field formatting with struct field tags**
+* Under the covers, marshalling works by using reflection 
+* Current problems 
+    * What happens if we marshal struct field tags? We get a json with all the zero values.
+    {"Host":"", "Port": 0, "Tags": null}
+    * The marshalled response has uppercase characters due to them being exported fields.
+* Solution to both problems: struct field tags: most commonly used by encoding packages.
+* These tags can be accessed using run-time reflection via the reflect package.
+
+* *Customizing JSON Key*
+* *Omitting Empty Values*: the fields will be skipped if they contain a zero-value.
+* *Ignoring a field*: Field using the - (dash) option will be completely ignored during encoding and decoding.
+
+type Tagged struct {
+    CustomKey string `json:"custom_key"`
+    OmitEmpty string `json:",omitempty"`
+    IgnoredName string `json:"-"`
+    TwoThings string `json:"two_things,omitempty"`
+}
+
+**Working with YAML(YAML Ain't Markup Language)**
+* It's very popular with projects like Kubernetes that depend on complex, heirarchical configurations.
+* Configurations that use it can start to suffer from readability issues as they scale up.
+* Unlike JSON which was created as a data-interchange format, YAML is largely a configuration format.
+* Advanatages of YAML over JSON:
+    * It can self-reference.
+    * It allows embedded block literals.
+    * Supports comments and complex data-types.
+
+**Encoding YAML**
+* Using go yaml. Method signatures exactly same as encoding/json.
+* func Marshal(v interface{}) ([]byte, error)
+* Just like the version provided by encoding/json, go-yaml's marshal function traverses the value v recursively. Any composite types that it finds - array, slices, maps, structs - will be encoded appropriately and will be present in the output as nested YAML elements.
 
 **Watching for configuration file changes**

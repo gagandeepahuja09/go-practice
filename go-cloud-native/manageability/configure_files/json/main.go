@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -20,13 +22,16 @@ func main() {
 
 	bytes, _ := json.Marshal(c)
 
+	bytesYaml, _ := yaml.Marshal(c)
+
 	fmt.Println(string(bytes))
+	fmt.Println(string(bytesYaml))
 
 	bytes, _ = json.MarshalIndent(c, "", "	")
 
 	fmt.Println(string(bytes))
 
-	c = Config{}
+	c2 := Config{}
 
 	bytes = []byte(`{
 		"Host": "127.0.0.1",
@@ -36,11 +41,13 @@ func main() {
 		}
 	}`)
 
-	err := json.Unmarshal(bytes, &c)
+	err := json.Unmarshal(bytes, &c2)
 
-	if err != nil {
-		fmt.Println(c)
+	if err == nil {
+		fmt.Println(c2)
 	}
+
+	c3 := Config{}
 
 	bytes = []byte(`{
 		"Host": "127.0.0.1",
@@ -49,9 +56,9 @@ func main() {
 		}
 	}`)
 
-	err = json.Unmarshal(bytes, &c)
+	err = json.Unmarshal(bytes, &c3)
 
-	if err != nil {
-		fmt.Println(c)
+	if err == nil {
+		fmt.Println(c3)
 	}
 }
