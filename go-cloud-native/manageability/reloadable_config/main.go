@@ -9,11 +9,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/fsnotify/fsnotify"
 	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Host string
+	Host string `yaml:"host"`
 	Port string
 	Tags map[string]string
 }
@@ -100,6 +101,33 @@ func watchConfig(filepath string) (<-chan string, <-chan error, error) {
 	return changes, errs, nil
 }
 
-func main() {
+func watchConfigNotify(filepath string) (<-chan string, <-chan error, error) {
+	changes := make(chan string)
 
+	watcher, err := fsnotify.NewWatcher()
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	err = watcher.Add(filepath)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	go func() {
+		changes <- filepath // First is always a CHANGE
+
+		for event := range watcher.Events {
+			if event.Op&fsnotify.Write == fsnotify.Write {
+				changes <- event.Name
+			}
+		}
+	}()
+
+	return changes, watcher.Errors, nil
+}
+
+func main() {
+	// also run a goroutine in parallel which prints the value of
 }

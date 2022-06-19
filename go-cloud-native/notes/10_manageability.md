@@ -252,3 +252,12 @@ type Tagged struct {
 *Cons*:
     1. Can be computationally wasteful, especially for very large or many files.
     2. Brief delay between the time the file is changed and the detection of the change.
+
+**Watching OS filesystem notifications**
+* Doing so is complicated by the fact that each OS has a different notification mechanism.
+* fsnotify package provides an abstraction that works on most OS.
+* Use fsnotify.NewWatcher function to get a new fsnotify.Watcher instance.
+* Use Add method to register more files to watch.
+* The watcher provides two channels watcher.Events and watcher.Errors which sends notification of file events and errors, respectively.
+* NOTE: We use event.Op & fsnotify.Write == fsnotify.Write to filter for write events.
+    * This is because the fsnotify.Event can include multiple operations, each of which is represented as one bit in an unsigned integer.
