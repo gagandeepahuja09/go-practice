@@ -191,4 +191,36 @@ type Tagged struct {
 * func Marshal(v interface{}) ([]byte, error)
 * Just like the version provided by encoding/json, go-yaml's marshal function traverses the value v recursively. Any composite types that it finds - array, slices, maps, structs - will be encoded appropriately and will be present in the output as nested YAML elements.
 
+**Decoding YAML**
+* func Unmarshal(data []byte, v interface) error
+* If v is nil or not a pointer, yaml.Unmarshal returns an error.
+
 **Watching for configuration file changes**
+* Situations where changes need to be made to the configuration of a running program.
+* If it doesn't explicitly watch for and reload changes, then it will have to be restarted to reread its configuration.
+    * Which can be inconvenient at best and introduce downtime at worst.
+* Restarting the program when the configuration changes is also fairly common.
+
+**Making our configuration reloadable**
+* We will want to have a single global instance of our configuration struct.
+* In a slightly larger project, we might even put this is in a separate config package.
+    var config Config
+
+* Antipattern: Configuration being passed to every method. Also, since configuration now lives in N places instead of one, it makes configuration reloading more complicated.
+
+**loadConfiguration Method**
+* We created the global config variable.
+* loadConfiguration(filepath string) (Config, error)
+    * File is read using ioutil.ReadFile which will return the byte slice and an error.
+    * Check for errors.
+    * Unmarshal the byte slice to an empty variable of type config.
+    * Check for error and returned the result config after unmarshal.
+
+**startListening Method**
+* startListening accepts two channels: updates which emits the name of the file when that file changes and an errors channel.
+* It watches both channels in a select inside an infinite loop.
+* Whenever a file updates, the updates channel sends its name, which is then passed to load configuration.
+* The configu struct returned by loadConfiguration replaces the current value of global config.
+
+**init Method**
+* It will retrieve the channels from a watchConfig method and pass them to startListening.
