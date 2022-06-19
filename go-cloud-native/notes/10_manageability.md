@@ -261,3 +261,66 @@ type Tagged struct {
 * The watcher provides two channels watcher.Events and watcher.Errors which sends notification of file events and errors, respectively.
 * NOTE: We use event.Op & fsnotify.Write == fsnotify.Write to filter for write events.
     * This is because the fsnotify.Event can include multiple operations, each of which is represented as one bit in an unsigned integer.
+
+**************************************************************************************
+
+**Viper: The Swiss Army Knife Of Configuration Packages**
+
+* spf13/viper features:
+
+* *Explicitly set values*
+    * Can be useful during testing.
+
+* *Command-line flags*
+    * Designed to be a companion to Cobra.
+
+* *Environment variables*
+    * It has full-support for environment variables.
+    * It treats environment variables as case-sensitive.
+
+* *Configuration files, in multiple file formats*
+    * JSON, YAML, TOML, HCL, INI, envfile, Java Properties files.
+    
+* It can also *write configuration files to help bootstrap your configurations*.
+
+* Optionally supports *live watching and rereading* of configuration files.
+
+* *Remote key/value stores*
+    * It can access key-value stores like etcd/Consul and can watch them for changes.
+
+* Supports *default values and typed variables*.
+
+* Note: Viper also brings in a lot of dependencies. If we are trying to build a slim, streamlined application, Viper may be more than you need.
+
+**Explicitly setting values in Viper**
+* Explicitly set values have the highest priority and would override values set by other mechanisms.
+    viper.Set("Verbose", true)
+    viper.Set("LogFile", LogFile)
+
+**Working with command-line flags in Viper**
+* Close integration with cobra makes it straightforward to bind command-line flags to configuration keys. 
+    
+    var rootCmd = &cobra.Command{ /* omitted for brevity */ }
+
+    func init() {
+        rootCmd.Flags().IntP("number", "n", 42, "an integer")
+        viper.BindPFlag("number", rootCmd.Flags().Lookup("number"))
+    }
+
+* Value can be retrieved using the viper.GetInt function.
+    n := viper.GetInt("number")
+
+**************************************************************************************
+
+**Feature Management with Feature Flags**
+* Software development pattern designed to increase the speed and safety with which new features can be developed and delivered by allowing specific functionality to be turned on or off during runtime, without having to deploy new code.
+
+* Benefits:
+    * Using this a developer can choose to enable an incomplete feature for testing and enable it for other users. 
+    * It allows many small incremental versions of software to be delivered without the overhead of branching and merging that comes with feature branches.
+        * Feature flags decouple the release of a feature from its deployment.
+    * It allows smaller, safer and faster iterations.
+    * Logic can be used to build feedback loops that can be combined with a circuit breaker-like pattern to enable or disable flags automatically under specific conditions.
+    * Feature gating - subset of users / A-B testing / geographical or other key-based rollout.
+
+**The Evolution of a Feature Flag**
