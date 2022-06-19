@@ -224,3 +224,31 @@ type Tagged struct {
 
 **init Method**
 * It will retrieve the channels from a watchConfig method and pass them to startListening.
+
+**Polling for configuration changes**
+* Using a time.Ticker to recalculate a hash of the config file every few seconds and reload if the hash changes.
+
+* Go makes a number of common hash algorithms available in its crypto package, each of which lives in its own subpackage of crypto and satisfies both the crypto.Hash and io.Writer interface.
+
+* Eg. crypto/sha256. 
+    * sha256.New() to get a new sha256.Hash value.
+    * Into which, we write the data we want to calculate the hash of, just a we would any io.Writer.
+
+* Generating hash of a configuration has 3 distinct parts: 
+    1. Getting a []byte source in the form of an io.Reader.
+    2. We copy those bytes from the io.Reader to our sha256.
+    3. Retrieve the hash sum from hash.
+
+**watchConfig method**
+* It will return the read only channels (changes, errors, any error in this method).
+* Using time.Ticker, every second it will calculateFileHash and send the result/err to the desired channel. 
+* All this will be done in a separate goroutine.
+
+**Polling approach pros and cons**
+*Pros*:
+    1. Straightforward.
+    2. Since hashing only cares about the configuration's contents, it can even be generalized to detect changes in places like remote key/value stores which technically aren't files.
+
+*Cons*:
+    1. Can be computationally wasteful, especially for very large or many files.
+    2. Brief delay between the time the file is changed and the detection of the change.

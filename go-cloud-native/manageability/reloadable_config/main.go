@@ -1,8 +1,13 @@
 package main
 
 import (
+	"crypto/sha256"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"os"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -53,6 +58,46 @@ func startListening(updates <-chan string, errors <-chan error) {
 			log.Println("error watching config:", err)
 		}
 	}
+}
+
+func calculateFileHash(filepath string) (string, error) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	hash := sha256.New()
+
+	if _, err := io.Copy(hash, file); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%x", hash.Sum(nil)), nil
+}
+
+func watchConfig(filepath string) (<-chan string, <-chan error, error) {
+	errs := make(chan error)
+	changes := make(chan string)
+	hash := ""
+
+	go func() {
+		ticker := time.NewTicker(time.Second)
+
+		for range ticker.C {
+			newhash, err := calculateFileHash(filepath)
+			if err != nil {
+				errs <- err
+				continue
+			}
+			if hash != newhash {
+				hash = newhash
+				changes <- filepath
+			}
+		}
+	}()
+
+	return changes, errs, nil
 }
 
 func main() {
