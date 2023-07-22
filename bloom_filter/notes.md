@@ -14,7 +14,7 @@
     * Non-cryptographic: Unnecessarily reduces speed.
 * Other factors affecting performance and effectiveness of the bloom filter:
     * Number of hash functions used.
-    * Size of the bit array.
+    * Size of the byte array.
     * Number of elements being stored in the filter.
 * murmur3 hash github golang
 * hash.Hash has a New32WithSeed, Write, Sum32, Reset function.

@@ -16,7 +16,7 @@ func generateRandomDataset(size int) []string {
 }
 
 func TestFalsePositivityRate(t *testing.T) {
-	for filterSize := 500; filterSize < 100000; filterSize *= 2 {
+	for filterSize := 25; filterSize < 100000; filterSize *= 2 {
 		var datasetTraining = generateRandomDataset(500)
 		var datasetValidation = generateRandomDataset(500)
 

@@ -22,26 +22,30 @@ func murmurHash(key string) int {
 }
 
 type BloomFilter struct {
-	filter []bool
+	filter []int8
 	size   int
 }
 
 func NewBloomFilter(size int) *BloomFilter {
 	initMurmurHash()
 	return &BloomFilter{
-		filter: make([]bool, size),
+		filter: make([]int8, size),
 		size:   size,
 	}
 }
 
 func (b *BloomFilter) Add(key string) {
 	idx := murmurHash(key) % b.size
-	b.filter[idx] = true
+	arrIdx := idx / 8
+	bitIdx := idx % 8
+	b.filter[arrIdx] = b.filter[arrIdx] | (1 << bitIdx)
 }
 
 func (b *BloomFilter) Exists(key string) bool {
 	idx := murmurHash(key) % b.size
-	return b.filter[idx]
+	arrIdx := idx / 8
+	bitIdx := idx % 8
+	return b.filter[arrIdx]&(1<<bitIdx) > 0
 }
 
 func main() {
