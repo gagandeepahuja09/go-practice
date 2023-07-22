@@ -24,6 +24,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rs/xid v1.5.0 h1:mKX4bl4iPYJtEIxp6CYiUuLQ/8DYMoz0PUdtGgMFRVc=
 github.com/rs/xid v1.5.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
+github.com/spaolacci/murmur3 v1.1.0 h1:7c1g84S4BPRrfL5Xrdp6fOJ206sU9y293DDHaoy0bLI=
+github.com/spaolacci/murmur3 v1.1.0/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
 github.com/stretchr/codecs v0.0.0-20170403063245-04a5b1e1910d h1:gXQ+QS3q874pcayiqszimfHPQ7ySFcekgzBMoTaVawk=
 github.com/stretchr/codecs v0.0.0-20170403063245-04a5b1e1910d/go.mod h1:RpfDhdqip2BYhzoE4esKm8axH5VywpvMW9o3wfcamek=
 github.com/stretchr/gomniauth v0.0.0-20170717123514-4b6c822be2eb h1:6lYIg/SCrz3gsCsEpRpK0BW3tBGt4VuQKlAleoxCgCc=
