@@ -40,3 +40,13 @@
     * You added elements into it.
     * There won't be any FN in bloom filter.
     * Hence dataset size = FP + TN
+
+* *Using Bit Manipulation*
+    * int8 ==> set 17th bit ==> 3rd number, 2 element
+        ==> array element ==> i / 8, bit position ==> i % 8.
+
+
+* *FPR: Increasing number of hash functions*
+    * This will make it more accurate at the start because we will consider that a key exists only if all of the hash functions has their respective idx set.
+    * After some point, from decreasing fpr, this will start increasing fpr (we need to find the sweet spot).
+        * This is because, with increasing hash functions, the chances of collision also increases.

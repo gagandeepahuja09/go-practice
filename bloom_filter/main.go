@@ -3,53 +3,63 @@ package main
 import (
 	"fmt"
 	"hash"
-	"time"
+	"math/rand"
 
 	"github.com/spaolacci/murmur3"
 )
 
-var mHasher hash.Hash32
-
-func initMurmurHash() {
-	mHasher = murmur3.New32WithSeed(uint32(time.Now().Unix()))
-}
-
-func murmurHash(key string) int {
-	mHasher.Write([]byte(key))
-	result := mHasher.Sum32()
-	mHasher.Reset()
+func murmurHash(mHash hash.Hash32, key string) int {
+	mHash.Write([]byte(key))
+	result := mHash.Sum32()
+	mHash.Reset()
 	return int(result)
 }
 
 type BloomFilter struct {
-	filter []int8
-	size   int
+	filter  []int8
+	size    int
+	hashFns []hash.Hash32
 }
 
-func NewBloomFilter(size int) *BloomFilter {
-	initMurmurHash()
+func NewBloomFilter(size, numHashFns int) *BloomFilter {
 	return &BloomFilter{
-		filter: make([]int8, size),
-		size:   size,
+		filter:  make([]int8, size),
+		size:    size,
+		hashFns: initMurmurHash(numHashFns),
 	}
 }
 
+func initMurmurHash(numHashFns int) []hash.Hash32 {
+	var mHashers []hash.Hash32
+	for i := 0; i < numHashFns; i++ {
+		mHashers = append(mHashers, murmur3.New32WithSeed(rand.Uint32()))
+	}
+	return mHashers
+}
+
 func (b *BloomFilter) Add(key string) {
-	idx := murmurHash(key) % b.size
-	arrIdx := idx / 8
-	bitIdx := idx % 8
-	b.filter[arrIdx] = b.filter[arrIdx] | (1 << bitIdx)
+	for _, mHash := range b.hashFns {
+		idx := murmurHash(mHash, key) % b.size
+		arrIdx := idx / 8
+		bitIdx := idx % 8
+		b.filter[arrIdx] = b.filter[arrIdx] | (1 << bitIdx)
+	}
 }
 
 func (b *BloomFilter) Exists(key string) bool {
-	idx := murmurHash(key) % b.size
-	arrIdx := idx / 8
-	bitIdx := idx % 8
-	return b.filter[arrIdx]&(1<<bitIdx) > 0
+	for _, mHash := range b.hashFns {
+		idx := murmurHash(mHash, key) % b.size
+		arrIdx := idx / 8
+		bitIdx := idx % 8
+		if b.filter[arrIdx]&(1<<bitIdx) == 0 {
+			return false
+		}
+	}
+	return true
 }
 
 func main() {
-	bloom := NewBloomFilter(10)
+	bloom := NewBloomFilter(10, 1)
 	keys := []string{"a", "b", "c"}
 	for _, key := range keys {
 		bloom.Add(key)
