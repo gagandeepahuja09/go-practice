@@ -10,7 +10,7 @@ import (
 
 var mHasher hash.Hash32
 
-func init() {
+func initMurmurHash() {
 	mHasher = murmur3.New32WithSeed(uint32(time.Now().Unix()))
 }
 
@@ -27,6 +27,7 @@ type BloomFilter struct {
 }
 
 func NewBloomFilter(size int) *BloomFilter {
+	initMurmurHash()
 	return &BloomFilter{
 		filter: make([]bool, size),
 		size:   size,
