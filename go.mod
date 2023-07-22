@@ -10,6 +10,7 @@ require (
 	github.com/gorilla/websocket v1.4.2
 	github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd
 	github.com/nsqio/go-nsq v1.1.0
+	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	github.com/rs/xid v1.5.0
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/stretchr/codecs v0.0.0-20170403063245-04a5b1e1910d // indirect
