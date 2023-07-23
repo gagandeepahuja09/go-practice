@@ -12,13 +12,13 @@ var redisClient *redis.Client
 
 type TokenBucketRateLimiter struct {
 	capacity            int
-	refillRateInSeconds int
+	refillRatePerSecond int
 }
 
 func NewTokenBucketRateLimiter(capacity, refillRate int) TokenBucketRateLimiter {
 	return TokenBucketRateLimiter{
 		capacity:            capacity,
-		refillRateInSeconds: refillRate,
+		refillRatePerSecond: refillRate,
 	}
 }
 
@@ -29,21 +29,28 @@ func (limiter *TokenBucketRateLimiter) Allow(userId string) bool {
 
 		local now = tonumber(ARGV[1])
 		local refillRate = tonumber(ARGV[2])
-		local capacity = tonumber(AGRV[3])
+		local capacity = tonumber(ARGV[3])
 
 		if not lastRefill then
 			lastRefill = now
 			tokens = capacity
 		end
 
-		local timeElapsed = now - lastRefill
-		local tokensToAdd = math.floor(timeElapsed * refillRate)
+		-- refill logic
+		local secondsElapsed = now - lastRefill
+		local tokensToAdd = secondsElapsed * refillRate
 		tokens = math.min(tokens + tokensToAdd, capacity)
+		lastRefill = now
 
-		redis.call("set", KEYS[1], tokens)
-		redis.call("set", KEYS[2], lastRefill)
+		-- consumption logic
+		tokens = math.max(tokens - 1, -1)
 
-		return tokens > 0
+		local ttl = 60 -- only for testing
+
+		redis.call("setex", KEYS[1], ttl, tokens)
+		redis.call("setex", KEYS[2], ttl, lastRefill)
+
+		return tokens
 	`
 
 	userIdTokensKey := fmt.Sprintf("user_id.%s.tokens", userId)
@@ -51,17 +58,37 @@ func (limiter *TokenBucketRateLimiter) Allow(userId string) bool {
 
 	cmd := redisClient.Eval(context.Background(), script,
 		[]string{userIdTokensKey, userIdLastRefillKey},
-		time.Now().Unix(), limiter.refillRateInSeconds, limiter.capacity)
+		time.Now().Unix(), limiter.refillRatePerSecond, limiter.capacity)
 
 	if cmd.Err() != nil {
+		fmt.Println(cmd.Err().Error())
 		return false
 	}
 
-	return cmd.Val().(int64) == 1
+	tokenCount := cmd.Val().(int64)
+
+	fmt.Println("tokenCount", tokenCount)
+
+	return tokenCount >= 0
 }
 
 func main() {
 	redisClient = redis.NewClient(&redis.Options{
 		Addr: "localhost:6379",
 	})
+
+	limiter := NewTokenBucketRateLimiter(10, 2)
+
+	userId := time.Now().GoString()
+	for i := 1; i <= 40; i++ {
+		if limiter.Allow(userId) {
+			fmt.Printf("Request %d allowed\n", i)
+		} else {
+			fmt.Printf("Request %d rejected\n", i)
+		}
+		time.Sleep(100 * time.Millisecond)
+		if i > 30 {
+			time.Sleep(500 * time.Millisecond)
+		}
+	}
 }
