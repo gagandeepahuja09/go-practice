@@ -1,4 +1,4 @@
-package main
+package vending_machine
 
 import (
 	"errors"
@@ -7,7 +7,7 @@ import (
 )
 
 type noMoney struct {
-	vendingMachine *vendingMachine
+	VendingMachine *VendingMachine
 }
 
 func (s noMoney) PressInsertCashButton() error {
@@ -15,8 +15,8 @@ func (s noMoney) PressInsertCashButton() error {
 }
 
 func (s noMoney) InsertCoins(coins int) error {
-	s.vendingMachine.coins = coins
-	s.vendingMachine.setState(s.vendingMachine.hasMoney)
+	s.VendingMachine.coins = coins
+	s.VendingMachine.setState(s.VendingMachine.hasMoney)
 	return nil
 }
 
@@ -28,14 +28,10 @@ func (s noMoney) ChooseProductAndQuantity(productId string, quantity int) error 
 	return errors.New(ErrOpNotSupported)
 }
 
-func (s noMoney) DispenseProduct() error {
-	return errors.New(ErrOpNotSupported)
+func (s noMoney) DispenseProduct() (int, error) {
+	return 0, errors.New(ErrOpNotSupported)
 }
 
-func (s noMoney) CancelOrRefund() error {
-	return errors.New(ErrOpNotSupported)
-}
-
-func (s noMoney) ReturnChange() error {
-	return errors.New(ErrOpNotSupported)
+func (s noMoney) CancelOrRefund() (int, error) {
+	return s.VendingMachine.hasMoney.CancelOrRefund()
 }

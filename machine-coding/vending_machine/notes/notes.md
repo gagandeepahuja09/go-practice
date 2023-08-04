@@ -13,8 +13,12 @@
 * Each state implementation will have access to an instance of context struct to change the state.
 
 **Vending Machine**
-* Important that all input and output is done through this vendingMachine struct which has all the necessary functions.
-* This will do all the initializations so that rather than call state.func we call vendingMachine.func
+* Important that all input and output is done through this VendingMachine struct which has all the necessary functions.
+* This will do all the initializations so that rather than call state.func we call VendingMachine.func
 * All the state structs will be initialized inside it only and need not be initialized explicitly.
 * We can now also smoothly transition from one state to another using:
-    * state.vendingMachine.setState(state.vendingMachine.noMoney)
+    * state.VendingMachine.setState(state.VendingMachine.noMoney)
+
+**Best Practice**
+* Keep on testing each and every function separately.
+* Focus on input and output and making it easy for the user.

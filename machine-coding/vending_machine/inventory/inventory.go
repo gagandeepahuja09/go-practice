@@ -29,9 +29,10 @@ type ProductDetails struct {
 }
 
 func View() string {
-	return fmt.Sprintf("%v", inventoryInfo)
+	return fmt.Sprintf("%+v", inventoryInfo)
 }
 
-func GetProductDetails(productId string) ProductDetails {
-	return inventoryInfo[productId]
+func GetProductDetails(productId string) (ProductDetails, bool) {
+	val, ok := inventoryInfo[productId]
+	return val, ok
 }
