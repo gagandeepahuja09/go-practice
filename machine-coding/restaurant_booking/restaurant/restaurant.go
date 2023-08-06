@@ -16,8 +16,9 @@ const (
 )
 
 const (
-	BookingOutOfRangeError = ""
-	HoursOutOfRangeError   = "Hours should be within range of 0 to 23"
+	ErrBookingOutOfRange       = "booking only allowed for upto 7 days in advance and only for a time in future"
+	ErrHoursOutOfRange         = "hours should be within range of 0 to 23"
+	ErrInsufficientTableInSlot = "insufficient tables in the current time slot for booking"
 )
 
 type RestaurantList []*Restaurant
@@ -76,10 +77,11 @@ func restaurantMatchesOptions(r *Restaurant, o Options) bool {
 }
 
 func (listR RestaurantList) Print() {
-	fmt.Printf("\n Restaurant List Result:")
+	fmt.Printf("\n Restaurant List Result: ")
 	for _, r := range listR {
 		fmt.Printf("\n%+v", *r)
 	}
+	fmt.Println()
 }
 
 func SearchRestaurants(o Options) RestaurantList {
@@ -93,7 +95,7 @@ func SearchRestaurants(o Options) RestaurantList {
 	return filterRes
 }
 
-// Date should be of the format: YYYYMMDD
+// Date should be of the format: YYYY-MM-DD
 // time: 0 to 23
 func (r *Restaurant) AddTimeSlot(date string, hours int) error {
 	parsedTime, err := time.Parse(dateParser, date)
@@ -102,7 +104,7 @@ func (r *Restaurant) AddTimeSlot(date string, hours int) error {
 		return err
 	}
 	if hours < 0 || hours > 23 {
-		return errors.New(HoursOutOfRangeError)
+		return errors.New(ErrHoursOutOfRange)
 	}
 
 	timeSlotKey := fmt.Sprintf("%s:%d", date, hours)
@@ -113,13 +115,27 @@ func (r *Restaurant) AddTimeSlot(date string, hours int) error {
 }
 
 func (r *Restaurant) BookTable(numPeople int, date string, hours int) error {
-	parsedBookingTime, err := time.Parse("2001-10-22", date)
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	parsedBookingTime, err := time.Parse(dateParser, date)
 	if err != nil {
 		return err
 	}
 
-	if time.Until(parsedBookingTime) > maxDiffAdvanceBooking {
-		return errors.New(BookingOutOfRangeError)
+	if time.Until(parsedBookingTime) > maxDiffAdvanceBooking || time.Until(parsedBookingTime) < 0 {
+		return errors.New(ErrBookingOutOfRange)
 	}
+
+	numTablesRequired := numPeople / 4
+	if (numPeople % 4) > 0 {
+		numTablesRequired++
+	}
+	timeSlotKey := fmt.Sprintf("%s:%d", date, hours)
+	numTablesAvailable, ok := r.slots[timeSlotKey]
+	if !ok || numTablesRequired > numTablesAvailable {
+		return errors.New(ErrInsufficientTableInSlot)
+	}
+
+	r.slots[timeSlotKey] = (numTablesAvailable - numTablesRequired)
 	return nil
 }

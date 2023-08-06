@@ -41,6 +41,47 @@ func addRestaurantsHelper() {
 	fmt.Printf("err4: %v\n", err)
 }
 
+func bookTablesSyncHelper(res booking.RestaurantList) {
+	// test out of range time error: future
+	err := res[0].BookTable(4, "2023-08-20", 22)
+	fmt.Printf("err5: %v\n", err)
+
+	// test out of range time error: past
+	err = res[0].BookTable(4, "2023-08-04", 22)
+	fmt.Printf("err6: %v\n", err)
+
+	// test unavailable error: 0 tables
+	err = res[0].BookTable(4, "2023-08-08", 23)
+
+	// test unavailable error: 11 tables, only 10 available
+	err = res[0].BookTable(41, "2023-08-08", 22)
+	fmt.Printf("err6: %v\n", err)
+
+	// test available: 7 tables, 10 available
+	err = res[0].BookTable(25, "2023-08-08", 22)
+	fmt.Printf("err7: %v\n", err)
+
+	// test unavailable error: 4 tables, only 3 available now
+	err = res[0].BookTable(25, "2023-08-08", 22)
+	fmt.Printf("err8: %v\n", err)
+}
+
+func bookTableConcurrentHelper(res booking.RestaurantList) {
+	res[0].AddTimeSlot("2023-08-08", 22)
+	errChan := make(chan error)
+	for i := 0; i < 10; i++ {
+		go func() {
+			err := res[0].BookTable(8, "2023-08-08", 22)
+			errChan <- err
+		}()
+	}
+
+	for i := 0; i < 10; i++ {
+		err := <-errChan
+		fmt.Println("Err concurrent: ", err)
+	}
+}
+
 func main() {
 	addRestaurantsHelper()
 
@@ -52,5 +93,7 @@ func main() {
 	})
 	res.Print()
 
-	res[0].BookTable()
+	bookTablesSyncHelper(res)
+
+	bookTableConcurrentHelper(res)
 }
