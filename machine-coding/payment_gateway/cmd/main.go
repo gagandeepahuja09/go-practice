@@ -10,11 +10,11 @@ func setBankDistributionHelper() {
 	errBankD := payment_gateway.SetMethodBankDistribution(payment_gateway.UPI, []payment_gateway.BankPercentage{
 		{
 			Percentage: 50,
-			Bank:       &payment_gateway.Hdfc,
+			BankName:   payment_gateway.HDFC,
 		},
 		{
 			Percentage: 60,
-			Bank:       &payment_gateway.Icici,
+			BankName:   payment_gateway.ICICI,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)
@@ -22,11 +22,11 @@ func setBankDistributionHelper() {
 	errBankD = payment_gateway.SetMethodBankDistribution(payment_gateway.UPI, []payment_gateway.BankPercentage{
 		{
 			Percentage: 80,
-			Bank:       &payment_gateway.Hdfc,
+			BankName:   payment_gateway.HDFC,
 		},
 		{
 			Percentage: 20,
-			Bank:       &payment_gateway.Icici,
+			BankName:   payment_gateway.ICICI,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)
@@ -34,11 +34,11 @@ func setBankDistributionHelper() {
 	errBankD = payment_gateway.SetMethodBankDistribution(payment_gateway.Card, []payment_gateway.BankPercentage{
 		{
 			Percentage: 10,
-			Bank:       &payment_gateway.Hdfc,
+			BankName:   payment_gateway.HDFC,
 		},
 		{
 			Percentage: 90,
-			Bank:       &payment_gateway.Icici,
+			BankName:   payment_gateway.ICICI,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)

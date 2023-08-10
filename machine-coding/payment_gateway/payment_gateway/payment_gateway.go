@@ -23,7 +23,7 @@ const (
 
 type BankPercentage struct {
 	Percentage int
-	Bank       Bank
+	BankName   BankName
 }
 
 type PaymentGateway struct {
@@ -62,7 +62,7 @@ type PaymentOptions struct {
 	MethodDetails interface{}
 }
 
-func getAppropriateBankFromDistribution(bankPercentages []BankPercentage) (Bank, error) {
+func findBankNameAsPerDistribution(bankPercentages []BankPercentage) (BankName, error) {
 	// ideal to use a math/rand library
 	rand100 := time.Now().Unix() % 100
 	fmt.Println("RAND_100: ", rand100)
@@ -70,10 +70,18 @@ func getAppropriateBankFromDistribution(bankPercentages []BankPercentage) (Bank,
 	for _, bp := range bankPercentages {
 		totalPercentage += bp.Percentage
 		if totalPercentage > int(rand100) {
-			return bp.Bank, nil
+			return bp.BankName, nil
 		}
 	}
-	return nil, errors.New(ErrorNoBankFound)
+	return "", errors.New(ErrorNoBankFound)
+}
+
+func getBankEntity(bankName BankName) Bank {
+	if bankName == ICICI {
+		return &Icici
+	}
+	// used as default
+	return &Hdfc
 }
 
 func SetMethodBankDistribution(method PaymentMethod, bankPercentages []BankPercentage) error {
@@ -82,7 +90,7 @@ func SetMethodBankDistribution(method PaymentMethod, bankPercentages []BankPerce
 		totalPercentage += bp.Percentage
 		pg.methodBankDistribution[method] = append(pg.methodBankDistribution[method], BankPercentage{
 			Percentage: totalPercentage,
-			Bank:       bp.Bank,
+			BankName:   bp.BankName,
 		})
 	}
 	if totalPercentage != 100 {
@@ -103,13 +111,8 @@ func MakePayment(c *Client, po PaymentOptions) error {
 	if !slices.Contains(pg.clientMethodsSupported[c], po.Method) {
 		return errors.New(ErrorMethodNotSupported)
 	}
-	bank, err := getAppropriateBankFromDistribution(pg.methodBankDistribution[po.Method])
-	fmt.Printf("BANK_FOUND_AND_ERROR: %+v %v\n", bank, err)
-	if bank == &Icici {
-		fmt.Println("ICICI_BANK")
-	} else {
-		fmt.Println("HDFC_BANK")
-	}
+	bankName, err := findBankNameAsPerDistribution(pg.methodBankDistribution[po.Method])
+	fmt.Printf("BANK_FOUND_AND_ERROR: %+v %v\n", bankName, err)
 
-	return getPaymentResponseFromBank(bank, po.Amount, po.Method, po.MethodDetails)
+	return getPaymentResponseFromBank(getBankEntity(bankName), po.Amount, po.Method, po.MethodDetails)
 }
