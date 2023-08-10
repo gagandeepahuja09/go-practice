@@ -10,11 +10,11 @@ func setBankDistributionHelper() {
 	errBankD := payment_gateway.SetMethodBankDistribution(payment_gateway.UPI, []payment_gateway.BankPercentage{
 		{
 			Percentage: 50,
-			BankName:   payment_gateway.HDFC,
+			Bank:       &payment_gateway.Hdfc,
 		},
 		{
 			Percentage: 60,
-			BankName:   payment_gateway.ICICI,
+			Bank:       &payment_gateway.Icici,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)
@@ -22,23 +22,23 @@ func setBankDistributionHelper() {
 	errBankD = payment_gateway.SetMethodBankDistribution(payment_gateway.UPI, []payment_gateway.BankPercentage{
 		{
 			Percentage: 80,
-			BankName:   payment_gateway.HDFC,
+			Bank:       &payment_gateway.Hdfc,
 		},
 		{
 			Percentage: 20,
-			BankName:   payment_gateway.ICICI,
+			Bank:       &payment_gateway.Icici,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)
 
-	errBankD = payment_gateway.SetMethodBankDistribution(payment_gateway.CreditCard, []payment_gateway.BankPercentage{
+	errBankD = payment_gateway.SetMethodBankDistribution(payment_gateway.Card, []payment_gateway.BankPercentage{
 		{
 			Percentage: 10,
-			BankName:   payment_gateway.HDFC,
+			Bank:       &payment_gateway.Hdfc,
 		},
 		{
 			Percentage: 90,
-			BankName:   payment_gateway.ICICI,
+			Bank:       &payment_gateway.Icici,
 		},
 	})
 	fmt.Printf("errBankD: %v\n", errBankD)
@@ -56,12 +56,12 @@ func main() {
 	cZomato := payment_gateway.AddClient("Zomato")
 
 	errFk := payment_gateway.AddSupportForMethods(cFk, []payment_gateway.PaymentMethod{
-		payment_gateway.CreditCard,
+		payment_gateway.Card,
 	})
 	fmt.Printf("errFk: %v\n", errFk)
 
 	errZomato := payment_gateway.AddSupportForMethods(cZomato, []payment_gateway.PaymentMethod{
-		payment_gateway.CreditCard,
+		payment_gateway.Card,
 		payment_gateway.UPI,
 	})
 	fmt.Printf("errZomato: %v\n", errZomato)
@@ -69,4 +69,22 @@ func main() {
 	payment_gateway.ListSupportedMethods(cZomato)
 
 	setBankDistributionHelper()
+
+	err := payment_gateway.MakePayment(cZomato, payment_gateway.PaymentOptions{
+		Method:        payment_gateway.Card,
+		MethodDetails: payment_gateway.CardDetails{},
+	})
+	fmt.Printf("MakePayment_err: %v\n", err)
+
+	err = payment_gateway.MakePayment(cZomato, payment_gateway.PaymentOptions{
+		Method:        payment_gateway.NetBanking,
+		MethodDetails: payment_gateway.NetBankingDetails{},
+	})
+	fmt.Printf("MakePayment_err_NB: %v\n", err)
+
+	err = payment_gateway.MakePayment(cZomato, payment_gateway.PaymentOptions{
+		Method:        payment_gateway.UPI,
+		MethodDetails: payment_gateway.UpiDetails{},
+	})
+	fmt.Printf("MakePayment_err_UPI: %v\n", err)
 }

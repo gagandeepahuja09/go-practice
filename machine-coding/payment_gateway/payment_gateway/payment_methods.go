@@ -4,7 +4,6 @@ type PaymentMethod string
 
 const (
 	UPI        PaymentMethod = "UPI"
-	CreditCard PaymentMethod = "CreditCard"
-	DebitCard  PaymentMethod = "DebitCard"
+	Card       PaymentMethod = "Card"
 	NetBanking PaymentMethod = "NetBanking"
 )
