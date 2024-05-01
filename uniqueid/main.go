@@ -7,22 +7,19 @@ import (
 	"time"
 )
 
+// auto-increment ==> distributed database, secure. 138
+// uuid ==> not sorted ==> created_at index
+// Hussein Naseer ==> why uuid is not efficient as PK.
+// 29 July timestamp = 1690588800000000000
+// difference = 1.80576e+16 ==> (62 ^ 9 to 62 ^ 10 - 1) ==> 10 digits
+// 62 ^ 9 = 1.3537087e+16 ==> 10 ^ 16 ==> 6 June 2023 onwards (10 digits)
+// 62 ^ 10 = 2.1834011e+14 ==> 10 ^ 14 ==> till 6 August 2049
+
 const (
 	firstJan2023TimestampInNs = 1672531200000000000
 	base                      = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 	maxRandomNumber           = 1e7
 )
-
-// auto-increment ==> distributed database, secure. 138
-// uuid ==> not sorted ==> created_at index
-// Hussein Naseer ==> why uuid is not efficient as PK.
-// 29 July timestamp = 1690588800000000000
-// difference = 1.80576e+16 ==> (62 ^ 9 to 62 ^ 10) ==> 10 digits
-// 62 ^ 9 = 1.3537087e+16 ==> 10 ^ 16 ==> 6 June 2023 onwards (10 digits)
-// 62 ^ 10 = 2.1834011e+14 ==> 10 ^ 14 ==> till 6 August 2049
-
-// timestamp (10 digit) + uniqueness (4 digit: random)
-// 62 ^ 4
 
 // Generates a random 14 digit id.
 func NewUniqueId() (string, error) {
@@ -66,3 +63,6 @@ func base62Encode(num int64) string {
 	}
 	return b62
 }
+
+// timestamp (10 digit) + uniqueness (4 digit: random)
+// 62 ^ 4

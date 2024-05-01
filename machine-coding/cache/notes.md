@@ -1,0 +1,2 @@
+* What all patterns can be applied?
+* *Strategy pattern*: We can implement strategy pattern in golang by creating an interface and utilizing the policy or strategy of the interface as a field in the manager struct.
