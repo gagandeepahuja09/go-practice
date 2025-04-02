@@ -40,11 +40,11 @@ func (pl ParkingLot) ParkCar(regNumber, colour string) (int, error) {
 	}
 	car := &car{registrationNumber: regNumber, colour: colour}
 	pl.slots[slot] = car
-	return slot + 1, nil
 
 	for _, observer := range pl.observers {
 		observer.notifyCarParked(slot+1, car)
 	}
+	return slot + 1, nil
 }
 
 func (pl ParkingLot) LeaveCar(slot int, regNumber string) error {
