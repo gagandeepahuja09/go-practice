@@ -32,7 +32,13 @@
 ## How to handle availability issue with the broker?
 * The current design is inmemory, so all messages will be lost. In order to avoid that, we require some persistence.
 * During bootup, we can read everything from the file.
-* We can also do async updates to the file in batches.
+* How to store the data in file and how to update that data?
+* Since this append only data, we will rely on files instead of storing in DB.
+
+## How to store data in the file?
+* Each topic will have a directory **Messages data:** `./pubsub_data/<topicName>/messages.log`
+* One message per line. Offset determined by line number.
+* **Subscription data:** `./pubsub_data/<topicName>/subscriptions/<consumerName>.offset`: only one line which will store the current offset.
 
 ## How to handle filtered message consumption?
 * As of now, the message is a string. It will be hard to apply filtering on a string. We will have to change to some data structure.
